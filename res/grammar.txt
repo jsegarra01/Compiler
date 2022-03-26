@@ -1,0 +1,6 @@
+program ::= <main_space>
+main_space ::= start { <code> }
+code ::= <var_decs>
+var_decs ::= <var_dec> <var_decs> | null
+var_dec ::= var type id <var_dec_extra>
+var_dec_extra ::= ; | = lit ;
