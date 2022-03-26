@@ -13,36 +13,33 @@ import java.util.Scanner;
 
 public class Parser {
 
-    public Parser() {
-    }
-
-    Object[] obs = new Object[15];
-
+    private Scanner sc;
     private boolean isIdentifer = false;
     private boolean isLiteral = false;
 
-    public void reader() throws IOException {
-        File myFile = new File("res/test2.ap");
-        Scanner sc = new Scanner(myFile, StandardCharsets.UTF_8);
+    public Parser(String path) {
+        File myFile = new File(path);
+        try {
+            sc = new Scanner(myFile, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            sc = null;
+        }
+    }
+
+    public Object read(){
         String content;
-        int i = 0;
-        while (sc.hasNext()){
-            content = sc.useDelimiter(" ").next();
-            System.out.println(content);
+
+        if (sc.hasNext()){
+            content = sc.useDelimiter(" |\\n").next();
             while (content.equals("")){
                 content = sc.useDelimiter(" ").next();
             }
             content = content.replace("\n", "").replace("\r","");
-            //content.replace("\n", "");
-            obs[i] = identifyString(content);
-            i++;
+            return identifyString(content);
         }
-    /* if (sc.hasNext()){
-            content = sc.useDelimiter(" ").next();
-            while (content == " ") content = sc.useDelimiter(" ").next();
-            identifyString(content);
-        }*/
-        //identifyString(sc.useDelimiter(" ").next());
+        else {
+            return null;
+        }
     }
 
     private boolean compareToKeyword(String word,String keyword, Token token) {
@@ -55,7 +52,6 @@ public class Parser {
     }
 
     private Object identifyString(String undefined) {
-        MainToken mainToken = new MainToken();
         TypeToken typeToken = new TypeToken();
         OpToken opToken = new OpToken();
         IdenToken idenToken = new IdenToken();
@@ -74,7 +70,6 @@ public class Parser {
         }
 
 
-        if (compareToKeyword(undefined, "start", mainToken)) return mainToken;
         if (compareToKeyword(undefined, "int", typeToken)) return typeToken;
         if (compareToKeyword(undefined, "char", typeToken)) return typeToken;
         if (compareToKeyword(undefined, "bool", typeToken)) return typeToken;
