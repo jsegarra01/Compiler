@@ -8,7 +8,7 @@ public class ProgramToken extends Token{
     }
 
     @Override
-    public Token getChild() {
+    public Object getChild() {
         return this.main;
     }
 

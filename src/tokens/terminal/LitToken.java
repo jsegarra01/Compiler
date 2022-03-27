@@ -6,4 +6,10 @@ public class LitToken extends Token {
     public LitToken() {
         super.name = "lit";
     }
+
+    @Override
+    public Object getChild() {
+        return null;
+    }
+
 }

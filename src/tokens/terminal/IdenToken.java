@@ -6,4 +6,9 @@ public class IdenToken extends Token {
     public IdenToken() {
         super.name = "id";
     }
+
+    @Override
+    public Object getChild() {
+        return null;
+    }
 }

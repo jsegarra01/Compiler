@@ -13,19 +13,20 @@ public class VarDecsToken extends Token{
     }
 
     @Override
-    public Token getChild() {
-        return null;
+    public Object getChild() {
+        return code;
     }
 
     @Override
     public Token insert(Token in) {
         try {
+            System.out.print("");
             this.code.add((VarDecToken) in);
             in.setParent(this);
             return in;
         }
         catch (ClassCastException e){
-            return this.parent.insert(in);
+            return this.parent;
         }
     }
 }

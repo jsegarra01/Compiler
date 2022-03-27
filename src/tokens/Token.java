@@ -21,7 +21,7 @@ public class Token {
         return parent;
     }
 
-    public Token getChild() {
+    public Object getChild() {
         return child;
     }
 

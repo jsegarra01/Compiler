@@ -5,6 +5,9 @@ import tokens.Token;
 import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class VarDecToken extends Token {
     protected TypeToken type;
     protected IdenToken identifier;
@@ -16,6 +19,15 @@ public class VarDecToken extends Token {
         this.type = null;
         this.identifier = null;
         this.value = null;
+    }
+
+    @Override
+    public Object getChild() {
+        ArrayList<Token> tmp = new ArrayList<>();
+        tmp.add(type);
+        tmp.add(identifier);
+        tmp.add(value);
+        return tmp;
     }
 
     @Override
@@ -38,7 +50,7 @@ public class VarDecToken extends Token {
                     return this.getParent();
                 }
                 else{
-                    return this.getParent().insert(in);
+                    return this.getParent();
                 }
             }
         }

@@ -1,5 +1,6 @@
 import tokens.Token;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class TreeBuilder {
@@ -76,5 +77,45 @@ public class TreeBuilder {
             System.out.print("");
         }
     }
+
+    public void printTree(){
+        ArrayList<ArrayList<Token>> disp = new ArrayList<>();
+        int lvl = 0;
+        boolean flag = true;
+        disp.add(new ArrayList<>());
+        disp.get(0).add(root);
+        while (flag){
+            disp.add(new ArrayList<>());
+            for (int i = 0; i < disp.get(lvl).size(); i++) {
+                if(disp.get(lvl).get(i) != null){
+                    Object obj = disp.get(lvl).get(i).getChild();
+                    if (obj != null){
+                        if(obj instanceof Token){
+                            disp.get(lvl+1).add((Token) obj);
+                        }
+                        else if(obj instanceof ArrayList){
+                            disp.get(lvl+1).addAll((ArrayList<Token>)obj);
+                        }
+                    }
+                }
+
+            }
+            if(disp.get(lvl+1).size() == 0){
+                flag = false;
+            }
+            else{
+                lvl++;
+            }
+        }
+        for (ArrayList<Token> curr: disp){
+            for (Token tmp : curr){
+                if(tmp != null){
+                    System.out.print(tmp.getName() + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
 
 }

@@ -8,7 +8,7 @@ public class MainToken extends Token{
     }
 
     @Override
-    public Token getChild() {
+    public Object getChild() {
         return this.code;
     }
 
