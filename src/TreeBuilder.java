@@ -8,6 +8,7 @@ public class TreeBuilder {
     private SymbolTable st;
     private Stack<String> stack;
     private Token root;
+    private boolean error;
 
     public TreeBuilder(Parser parser, SymbolTable st) {
         this.parser = parser;
@@ -16,13 +17,14 @@ public class TreeBuilder {
         this.stack.push("$");
         this.stack.push("program");
         this.root = new Token();
+        this.error = false;
     }
 
     public void run(){
         Object curr = null;
         Token pointerT = this.root;
         String topStack;
-        while (!this.stack.empty()){
+        while (!this.stack.empty() && !error){
             if(curr == null){
                 curr = parser.read();
             }
@@ -42,6 +44,7 @@ public class TreeBuilder {
                     }
                     if (!tmpCmp.equals(topStack)) {
                         System.out.println("Grammar Error");
+                        error = true;
                     }
                     curr = null;
                 }
@@ -52,6 +55,7 @@ public class TreeBuilder {
             }
             else if(topStack.equals("$") || curr.equals("$")){
                 System.out.println("1Grammar Error");
+                error = true;
             }
             else{
                 //Case top of stack is a variable
@@ -79,6 +83,9 @@ public class TreeBuilder {
     }
 
     public void printTree(){
+        if(error){
+            return;
+        }
         ArrayList<ArrayList<Token>> disp = new ArrayList<>();
         int lvl = 0;
         boolean flag = true;
