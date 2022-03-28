@@ -36,6 +36,9 @@ public class TreeBuilder {
                 if(!topStack.equals("null")){
                     String tmpCmp;
                     if(curr instanceof String){
+                        if(curr.equals(";") || curr.equals("}")){
+                            pointerT = pointerT.getParent();
+                        }
                         tmpCmp = (String) curr;
                     }
                     else{
