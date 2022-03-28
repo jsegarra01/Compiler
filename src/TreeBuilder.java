@@ -54,14 +54,15 @@ public class TreeBuilder {
                 return;
             }
             else if(topStack.equals("$") || curr.equals("$")){
-                System.out.println("1Grammar Error");
+                System.out.println("Grammar Error");
                 error = true;
             }
             else{
                 //Case top of stack is a variable
                 String tmpToSplit = st.getProduction(topStack, (String) curr);
                 if(tmpToSplit == null){
-                    System.out.println("2 Grammar Error -> topStack:" + topStack + " curr: " + (String) curr);
+                    System.out.println("Found non expected value at:" + (String) curr);
+                    error = true;
                     return;
                 }
                 String[] prod = tmpToSplit.split(" ");
