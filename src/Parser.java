@@ -15,7 +15,7 @@ public class Parser {
 
     private Scanner sc;
     private boolean isIdentifer = false;
-    private boolean isLiteral = false;
+    private boolean LoI = false;
 
     public Parser(String path) {
         File myFile = new File(path);
@@ -45,7 +45,7 @@ public class Parser {
     private boolean compareToKeyword(String word,String keyword, Token token) {
         if(word.equals(keyword)) {
             if(token.getClass().equals(TypeToken.class)) isIdentifer = true;
-            if(token.getClass().equals(OpToken.class)) isLiteral = true;
+            if(token.getClass().equals(OpToken.class)) LoI = true;
             token.setRaw(word);
             return true;
         } else return false;
@@ -63,9 +63,13 @@ public class Parser {
             return idenToken;
         }
 
-        if (isLiteral) {
+        if (LoI) {
+            LoI = false;
+            if('$' == undefined.charAt(0)) {
+                idenToken.setRaw(undefined.substring(1));
+                return idenToken;
+            }
             litToken.setRaw(undefined);
-            isLiteral = false;
             return litToken;
         }
 
@@ -81,7 +85,7 @@ public class Parser {
         if (compareToKeyword(undefined, "/", opToken)) return opToken;
 
 
-        if (undefined.equals("=")) isLiteral = true;
+        if (undefined.equals("=")) LoI = true;
 
         return undefined;
     }
