@@ -25,6 +25,9 @@ public class VarDecsToken extends Token{
                 in.setParent(this);
                 return in;
             }
+            else if (in instanceof VarDecsToken){
+                return this;
+            }
             else{
                 return this.parent.insert(in);
             }

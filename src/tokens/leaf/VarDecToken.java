@@ -46,7 +46,7 @@ public class VarDecToken extends Token {
                 if(in instanceof LitToken){
                     this.value = (LitToken) in;
                     this.value.setParent(this);
-                    return this.getParent();
+                    return this;
                 }
                 else{
                     return this.getParent().insert(in);

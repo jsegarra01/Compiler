@@ -71,6 +71,11 @@ public class TreeBuilder {
                 String[] prod = tmpToSplit.split(" ");
                 if(Token.genToken(topStack) != null && !tmpToSplit.equals("")){
                     pointerT = pointerT.insert(Token.genToken(topStack));
+                    if (pointerT == null){
+                        System.out.println("Parsing Error");
+                        error = true;
+                        return;
+                    }
                 }
 
                 for (int i = prod.length-1; i >= 0; i--) {
