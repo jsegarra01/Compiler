@@ -14,7 +14,6 @@ public class VarDecToken extends Token {
     protected LitToken value;
 
     public VarDecToken() {
-        //TODO: Figure out what to do with the extra part
         super.name = "var_dec";
         this.type = null;
         this.identifier = null;
@@ -50,7 +49,7 @@ public class VarDecToken extends Token {
                     return this.getParent();
                 }
                 else{
-                    return this.getParent();
+                    return this.getParent().insert(in);
                 }
             }
         }
