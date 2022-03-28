@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class SymbolTable {
-    private static String path = "res/grammar.txt";
+    private static final String PATH = "res/grammar.txt";
     private HashMap<String, ArrayList<String>> grammar;
     private ArrayList<String> terminals;
     private HashMap<String, ArrayList<String>> firsts;
@@ -18,7 +18,7 @@ public class SymbolTable {
         //To validate results
         grammar = new HashMap<>();
         try {
-            Scanner sc = new Scanner(new File(path));
+            Scanner sc = new Scanner(new File(PATH));
             //Reading first line which contains all valid terminals
             this.terminals = new ArrayList<>();
             String[] termData = sc.nextLine().split(" ");
