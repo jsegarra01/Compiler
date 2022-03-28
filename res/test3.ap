@@ -1,0 +1,5 @@
+start {
+    var int a = 2 ;
+    var int b ;
+    var int c = 3 ;
+}

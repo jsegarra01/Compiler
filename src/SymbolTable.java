@@ -1,14 +1,14 @@
-package tokens;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class SymbolTable {
-    private static String path = "res/grammar.txt";
+    private static final String PATH = "res/grammar.txt";
     private HashMap<String, ArrayList<String>> grammar;
+    private ArrayList<String> terminals;
     private HashMap<String, ArrayList<String>> firsts;
     private HashMap<String, ArrayList<String>> follows;
     private HashMap<String, HashMap<String, String>> parseTable;
@@ -18,7 +18,12 @@ public class SymbolTable {
         //To validate results
         grammar = new HashMap<>();
         try {
-            Scanner sc = new Scanner(new File(path));
+            Scanner sc = new Scanner(new File(PATH));
+            //Reading first line which contains all valid terminals
+            this.terminals = new ArrayList<>();
+            String[] termData = sc.nextLine().split(" ");
+            this.terminals.addAll(Arrays.asList(termData));
+
             ArrayList<String> tmpVars = new ArrayList<>();
             //Loads the grammar
             while (sc.hasNextLine()){
@@ -67,6 +72,11 @@ public class SymbolTable {
                             else {
                                 parseTable.get(currVar).put(term, production);
                             }
+                        }
+                    }
+                    else if(chunks[0].equals("null")){
+                        for (String followed : follows.get(currVar)){
+                            parseTable.get(currVar).put(followed, "");
                         }
                     }
                     else{
@@ -164,11 +174,24 @@ public class SymbolTable {
         return in.contains("<") && in.contains(">");
     }
 
-    private String cleanVar(String in){
+    public String cleanVar(String in){
         return in.replace("<", "").replace(">", "");
     }
 
     private String dirtyVar(String in){
         return "<" + in + ">";
+    }
+
+    public boolean isTerminal(String in){
+        return this.terminals.contains(in);
+    }
+
+    public String getProduction(String var, String terminal){
+        if(parseTable.containsKey(var)){
+            return parseTable.get(var).getOrDefault(terminal, null);
+        }
+        else{
+            return null;
+        }
     }
 }

@@ -16,6 +16,7 @@ public class Parser {
     private Scanner sc;
     private boolean isIdentifer = false;
     private boolean isLiteral = false;
+    private boolean end;
 
     public Parser(String path) {
         File myFile = new File(path);
@@ -24,6 +25,7 @@ public class Parser {
         } catch (IOException e) {
             sc = null;
         }
+        end = false;
     }
 
     public Object read(){
@@ -37,8 +39,14 @@ public class Parser {
             content = content.replace("\n", "").replace("\r","");
             return identifyString(content);
         }
-        else {
-            return null;
+        else{
+            if(!end){
+                end = true;
+                return "$";
+            }
+            else{
+                return null;
+            }
         }
     }
 

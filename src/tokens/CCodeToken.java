@@ -1,4 +1,4 @@
 package tokens;
 
-public class CCodeToken {
+public class CCodeToken extends Token{
 }

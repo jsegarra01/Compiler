@@ -1,3 +1,4 @@
+start { } null var type id ; = lit
 program ::= <main_space>
 main_space ::= start { <code> }
 code ::= <var_decs>
