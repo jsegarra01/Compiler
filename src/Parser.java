@@ -62,8 +62,8 @@ public class Parser {
         IdenToken idenToken = new IdenToken();
         LitToken litToken = new LitToken();
 
-        if (isIdentifer) {
-            idenToken.setRaw(undefined);
+        if (isIdentifer || undefined.contains("$")) {
+            idenToken.setRaw(undefined.replace("$", ""));
             isIdentifer = false;
             return idenToken;
         }
