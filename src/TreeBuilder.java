@@ -65,7 +65,13 @@ public class TreeBuilder {
             }
             else{
                 //Case top of stack is a variable
-                String tmpToSplit = st.getProduction(topStack, (String) curr);
+                String tmpToSplit;
+                if(curr instanceof String){
+                    tmpToSplit = st.getProduction(topStack, (String) curr);
+                }
+                else{
+                    tmpToSplit = st.getProduction(topStack, ((Token) curr).getName());
+                }
                 if(tmpToSplit == null){
                     System.out.println("Found non expected value at:" + (String) curr);
                     error = true;

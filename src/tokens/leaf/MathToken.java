@@ -1,5 +1,6 @@
 package tokens.leaf;
 
+import tokens.CCodeToken;
 import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
 import tokens.terminal.OpToken;
@@ -48,6 +49,9 @@ public class MathToken extends Token {
                     this.op = (OpToken) in;
                     this.op.setParent(this);
                     return this;
+                }
+                else if (in instanceof CCodeToken){
+                    return this.parent.insert(in);
                 }
                 else{
                     return null;

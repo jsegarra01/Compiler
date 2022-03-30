@@ -21,7 +21,12 @@ public class CCodeToken extends Token{
     public Token insert(Token in) {
         try {
             if (in instanceof VarAssToken){
-
+                code.add(in);
+                in.setParent(this);
+                return in;
+            }
+            else if (in instanceof CCodeToken){
+                return this;
             }
         }
         catch (ClassCastException e){
