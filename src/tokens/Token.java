@@ -1,5 +1,7 @@
 package tokens;
 
+import tokens.leaf.MathToken;
+import tokens.leaf.VarAssToken;
 import tokens.leaf.VarDecToken;
 
 public class Token {
@@ -46,6 +48,9 @@ public class Token {
             case "code" -> new CodeToken();
             case "var_decs" -> new VarDecsToken();
             case "var_dec" -> new VarDecToken();
+            case "ccode" -> new CCodeToken();
+            case "var_ass" -> new VarAssToken();
+            case "math_exp" -> new MathToken();
             default -> null;
         };
     }
