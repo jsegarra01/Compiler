@@ -1,8 +1,5 @@
-import tokens.MainToken;
-import tokens.OpToken;
+import tokens.terminal.OpToken;
 import tokens.Token;
-import tokens.VarDecsToken;
-import tokens.leaf.VarDecToken;
 import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;

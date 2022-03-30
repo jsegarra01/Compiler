@@ -1,6 +1,7 @@
 import tokens.Token;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 public class TreeBuilder {
@@ -32,11 +33,13 @@ public class TreeBuilder {
                 topStack = stack.pop();
             }while (topStack.equals(""));
 
+            System.out.print("");
+
             if(st.isTerminal(topStack)){
                 if(!topStack.equals("null")){
                     String tmpCmp;
                     if(curr instanceof String){
-                        if(curr.equals(";") || curr.equals("}")){
+                        if(curr.equals("}")){
                             pointerT = pointerT.getParent();
                         }
                         tmpCmp = (String) curr;
@@ -45,7 +48,7 @@ public class TreeBuilder {
                         tmpCmp = ((Token) curr).getName();
                         pointerT = pointerT.insert((Token) curr);
                     }
-                    if (!tmpCmp.equals(topStack)) {
+                    if (!Arrays.asList(tmpCmp.split(" ")).contains(topStack)) {
                         System.out.println("Grammar Error");
                         error = true;
                     }
@@ -69,7 +72,7 @@ public class TreeBuilder {
                     return;
                 }
                 String[] prod = tmpToSplit.split(" ");
-                if(Token.genToken(topStack) != null && !tmpToSplit.equals("")){
+                if(Token.genToken(topStack) != null ){
                     pointerT = pointerT.insert(Token.genToken(topStack));
                     if (pointerT == null){
                         System.out.println("Parsing Error");

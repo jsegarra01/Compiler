@@ -31,7 +31,7 @@ public class CodeToken extends Token{
             }
         }
         catch (ClassCastException e){
-            return this.parent.insert(in);
+            return null;
         }
     }
 }

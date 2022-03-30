@@ -26,14 +26,17 @@ public class VarDecsToken extends Token{
                 return in;
             }
             else if (in instanceof VarDecsToken){
-                return this;
+                return this.parent;
+            }
+            else if(in instanceof CCodeToken){
+                return this.parent.insert(in);
             }
             else{
-                return this.parent.insert(in);
+                return null;
             }
         }
         catch (ClassCastException e){
-            return this.parent;
+            return null;
         }
     }
 }
