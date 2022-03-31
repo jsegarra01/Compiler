@@ -72,6 +72,9 @@ public class MathToken extends Token {
                     return null;
                 }
             }
+            else if (in instanceof CCodeToken){
+                return this.parent.insert(in);
+            }
         }
         catch (ClassCastException e){
             return null;
