@@ -1,5 +1,7 @@
 package tokens;
 
+import java.util.ArrayList;
+
 public class CodeToken extends Token{
     protected VarDecsToken varDecs;
     protected CCodeToken code;
@@ -10,7 +12,10 @@ public class CodeToken extends Token{
 
     @Override
     public Object getChild() {
-        return this.varDecs;
+        ArrayList<Token> tmp = new ArrayList<>();
+        tmp.add(varDecs);
+        tmp.add(code);
+        return tmp;
     }
 
     @Override

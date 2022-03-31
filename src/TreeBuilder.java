@@ -45,7 +45,7 @@ public class TreeBuilder {
                         tmpCmp = (String) curr;
                     }
                     else{
-                        tmpCmp = ((Token) curr).getName();
+                        tmpCmp = ((Token) curr).getName() + " " + ((Token) curr).getRaw();
                         pointerT = pointerT.insert((Token) curr);
                     }
                     if (!Arrays.asList(tmpCmp.split(" ")).contains(topStack)) {
@@ -70,10 +70,25 @@ public class TreeBuilder {
                     tmpToSplit = st.getProduction(topStack, (String) curr);
                 }
                 else{
-                    tmpToSplit = st.getProduction(topStack, ((Token) curr).getName());
+                    tmpToSplit = null;
+                    for (String prod: ((Token) curr).getName().split(" ")) {
+                        tmpToSplit = st.getProduction(topStack, ((Token) curr).getName());
+                        if(tmpToSplit != null){
+                            break;
+                        }
+                    }
+                    if(tmpToSplit == null){
+                        tmpToSplit = st.getProduction(topStack, ((Token) curr).getRaw());
+                    }
                 }
                 if(tmpToSplit == null){
-                    System.out.println("Found non expected value at:" + (String) curr);
+                    if(curr instanceof String){
+                        System.out.println("Found non expected value at:" + (String) curr);
+                    }
+                    else{
+                        System.out.println("Found non expected value at: " + ((Token) curr).getRaw());
+                    }
+
                     error = true;
                     return;
                 }
