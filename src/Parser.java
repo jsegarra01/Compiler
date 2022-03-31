@@ -54,6 +54,7 @@ public class Parser {
             else {
                 try {
                     double d = Double.parseDouble(word);
+                    token.setRaw(word);
                 } catch (NumberFormatException nfe) {
                     return false;
                 }
