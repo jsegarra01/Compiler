@@ -14,8 +14,8 @@ import java.util.Scanner;
 public class Parser {
 
     private Scanner sc;
-    private boolean isIdentifer = false;
-    private boolean isLiteral = false;
+    private String[] typeTokens = {"int", "char", "float", "bool"};
+    private String[] opTokens = {"+", "-", "*", "/"};
     private boolean end;
 
     public Parser(String path) {
@@ -50,13 +50,36 @@ public class Parser {
         }
     }
 
-    private boolean compareToKeyword(String word,String keyword, Token token) {
-        if(word.equals(keyword)) {
-            if(token.getClass().equals(TypeToken.class)) isIdentifer = true;
-            if(token.getClass().equals(OpToken.class)) isLiteral = true;
-            token.setRaw(word);
+    private boolean isLiteral(String word, Token token) {
+        if(word.equals("true") || word.equals("false")) token.setRaw(word);
+        else {
+            if(word.charAt(0) == '\'') token.setRaw(word.substring(1, word.length() -1));
+            else {
+                try {
+                    double d = Double.parseDouble(word);
+                } catch (NumberFormatException nfe) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isIdentifer(String word, Token token) {
+        if('$' == word.charAt(0)) {
+            token.setRaw(word.substring(1));
             return true;
         } else return false;
+    }
+
+    private boolean compareToKeyword(String word,String[] keywords, Token token) {
+        for (String keyword: keywords) {
+            if(word.equals(keyword)) {
+                token.setRaw(word);
+                return true;
+            }
+        }
+        return false;
     }
 
     private Object identifyString(String undefined) {
@@ -65,31 +88,11 @@ public class Parser {
         IdenToken idenToken = new IdenToken();
         LitToken litToken = new LitToken();
 
-        if (isIdentifer) {
-            idenToken.setRaw(undefined);
-            isIdentifer = false;
-            return idenToken;
-        }
 
-        if (isLiteral) {
-            litToken.setRaw(undefined);
-            isLiteral = false;
-            return litToken;
-        }
-
-
-        if (compareToKeyword(undefined, "int", typeToken)) return typeToken;
-        if (compareToKeyword(undefined, "char", typeToken)) return typeToken;
-        if (compareToKeyword(undefined, "bool", typeToken)) return typeToken;
-        if (compareToKeyword(undefined, "float", typeToken)) return typeToken;
-
-        if (compareToKeyword(undefined, "+", opToken)) return opToken;
-        if (compareToKeyword(undefined, "-", opToken)) return opToken;
-        if (compareToKeyword(undefined, "*", opToken)) return opToken;
-        if (compareToKeyword(undefined, "/", opToken)) return opToken;
-
-
-        if (undefined.equals("=")) isLiteral = true;
+        if (compareToKeyword(undefined, typeTokens, typeToken)) return typeToken;
+        if (compareToKeyword(undefined, opTokens, opToken)) return opToken;
+        if (isIdentifer(undefined, idenToken)) return idenToken;
+        if (isLiteral(undefined, litToken)) return litToken;
 
         return undefined;
     }
