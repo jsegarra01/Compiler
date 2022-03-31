@@ -1,4 +1,4 @@
 start {
-    var int a ;
+    var int $a ;
     $b = 2 ;
 }
