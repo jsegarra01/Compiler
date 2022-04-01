@@ -17,6 +17,15 @@ public class MathToken extends Token {
         super.name = "math";
     }
 
+    public void replace(Token trg, Token value){
+        if(this.left == trg){
+            this.left = value;
+        }
+        else{
+            this.right = value;
+        }
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();
@@ -66,13 +75,40 @@ public class MathToken extends Token {
                 else if (in instanceof IdenToken || in instanceof LitToken){
                     this.right = in;
                     this.right.setParent(this);
-                    return this.parent;
+                    return this;
                 }
                 else{
                     return null;
                 }
             }
-            else if (in instanceof CCodeToken){
+            else if(in instanceof OpToken){
+                if(this.op.getRaw().equals("*") || this.op.getRaw().equals("/")){
+                    MathToken tmp = new MathToken();
+                    tmp.setParent(this.getParent());
+                    if(this.getParent() instanceof VarAssToken){
+                        VarAssToken parent = (VarAssToken) this.getParent();
+                        parent.setValue(tmp);
+                    }
+                    else {
+                        MathToken parent = (MathToken) this.getParent();
+                        parent.replace(this, tmp);
+                    }
+                    this.setParent(tmp);
+                    tmp.left = this;
+                    tmp.op = (OpToken) in;
+                    return tmp;
+                }
+                //else if(in.getRaw().equals("*") || in.getRaw().equals("/")){
+                else {
+                    MathToken tmp = new MathToken();
+                    tmp.left = this.right;
+                    this.right = tmp;
+                    tmp.setParent(this);
+                    tmp.op = (OpToken) in;
+                    return tmp;
+                }
+            }
+            else if (in instanceof CCodeToken || in instanceof VarAssToken){
                 return this.parent.insert(in);
             }
         }
