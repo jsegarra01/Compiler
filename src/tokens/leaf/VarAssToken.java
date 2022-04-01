@@ -16,6 +16,10 @@ public class VarAssToken extends Token {
         super.name = "var_ass";
     }
 
+    public void setValue(MathToken value) {
+        this.value = value;
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();
