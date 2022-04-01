@@ -63,7 +63,23 @@ public class SymbolTable {
                 for (String production : grammar.get(currVar)){
                     String[] chunks = production.split(" ");
                     if(isVariable(chunks[0])){
-                        for (String term : firsts.get(cleanVar(chunks[0]))){
+                        //For null firsts of a production we much check what comes after
+                        ArrayList<String> tmpArr = new ArrayList<>(firsts.get(cleanVar(chunks[0])));
+                        if(tmpArr.contains("null")){
+                            if(chunks.length > 1){
+                                for (int j = 1; j < chunks.length && tmpArr.contains("null"); j++) {
+                                    tmpArr.remove("null");
+                                    if (isTerminal(chunks[j])){
+                                        tmpArr.add(chunks[j]);
+                                    }
+                                    else{
+                                        tmpArr.addAll(findFirsts(cleanVar(chunks[j])));
+                                    }
+                                }
+                            }
+                        }
+                        //End
+                        for (String term : tmpArr){
                             if(term.equals("null")){
                                 for (String followed : follows.get(currVar)){
                                     parseTable.get(currVar).put(followed, production);
@@ -91,6 +107,9 @@ public class SymbolTable {
     }
 
     private ArrayList<String> findFirsts(String in){
+        if(firsts.containsKey(in)){
+            return firsts.get(in);
+        }
         ArrayList<String> out = new ArrayList<>();
         for (int i = 0; i < grammar.get(in).size(); i++) {
             String first = grammar.get(in).get(i).split(" ")[0];
@@ -99,8 +118,23 @@ public class SymbolTable {
                 if(!firsts.containsKey(first)){
                     firsts.put(first, findFirsts(first));
                 }
-
-                nonRepetitionJoin(out, firsts.get(first));
+                //Null in first set
+                ArrayList<String> tmpArr = new ArrayList<>(firsts.get(first));
+                if(tmpArr.contains("null")){
+                    String[] prods = grammar.get(in).get(i).split(" ");
+                    if(prods.length > 1){
+                        for (int j = 1; j < prods.length && tmpArr.contains("null"); j++) {
+                            tmpArr.remove("null");
+                            if (isTerminal(prods[j])){
+                                tmpArr.add(prods[j]);
+                            }
+                            else{
+                                tmpArr.addAll(findFirsts(cleanVar(prods[j])));
+                            }
+                        }
+                    }
+                }
+                nonRepetitionJoin(out, tmpArr);
 
             }
             else{
