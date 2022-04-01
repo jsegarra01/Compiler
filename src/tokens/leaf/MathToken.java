@@ -9,6 +9,7 @@ import tokens.Token;
 import java.util.ArrayList;
 
 public class MathToken extends Token {
+    //TODO: Need to change grammar to be able to accept two multiplications or divs next to each other
     private Token left;
     private OpToken op;
     private Token right;

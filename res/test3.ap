@@ -1,3 +1,5 @@
 start {
+    var int $a ;
+    var int $b = 2 ;
     $b = 1 + 1 * ( 1 + 1 ) ;
 }
