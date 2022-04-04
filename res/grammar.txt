@@ -1,7 +1,17 @@
-start { } null var type id ; = lit
+start { } null var type id ; = lit * / + - ( )
 program ::= <main_space>
 main_space ::= start { <code> }
-code ::= <var_decs>
+code ::= <var_decs> <ccode>
 var_decs ::= <var_dec> <var_decs> | null
 var_dec ::= var type id <var_dec_extra>
 var_dec_extra ::= ; | = lit ;
+ccode ::= <var_ass> <ccode> | null
+var_ass ::= id = <math_exp> ;
+math_exp ::= <math> <math_exp_ex>
+math_exp_ex ::= null | <math_op1> <math> <math_exp_ex>
+math ::= <math_fac> <math_ex>
+math_ex ::= null | <math_op2> <math>
+math_fac ::= <lit_iden> | ( <math_exp> )
+math_op1 ::= + | -
+math_op2 ::= * | /
+lit_iden ::= id | lit

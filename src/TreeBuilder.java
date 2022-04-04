@@ -1,6 +1,7 @@
 import tokens.Token;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 public class TreeBuilder {
@@ -32,20 +33,22 @@ public class TreeBuilder {
                 topStack = stack.pop();
             }while (topStack.equals(""));
 
+            System.out.print("");
+
             if(st.isTerminal(topStack)){
                 if(!topStack.equals("null")){
                     String tmpCmp;
                     if(curr instanceof String){
-                        if(curr.equals(";") || curr.equals("}")){
+                        if(curr.equals("}")){
                             pointerT = pointerT.getParent();
                         }
                         tmpCmp = (String) curr;
                     }
                     else{
-                        tmpCmp = ((Token) curr).getName();
+                        tmpCmp = ((Token) curr).getName() + " " + ((Token) curr).getRaw();
                         pointerT = pointerT.insert((Token) curr);
                     }
-                    if (!tmpCmp.equals(topStack)) {
+                    if (!Arrays.asList(tmpCmp.split(" ")).contains(topStack)) {
                         System.out.println("Grammar Error");
                         error = true;
                     }
@@ -62,14 +65,35 @@ public class TreeBuilder {
             }
             else{
                 //Case top of stack is a variable
-                String tmpToSplit = st.getProduction(topStack, (String) curr);
+                String tmpToSplit;
+                if(curr instanceof String){
+                    tmpToSplit = st.getProduction(topStack, (String) curr);
+                }
+                else{
+                    tmpToSplit = null;
+                    for (String prod: ((Token) curr).getName().split(" ")) {
+                        tmpToSplit = st.getProduction(topStack, ((Token) curr).getName());
+                        if(tmpToSplit != null){
+                            break;
+                        }
+                    }
+                    if(tmpToSplit == null){
+                        tmpToSplit = st.getProduction(topStack, ((Token) curr).getRaw());
+                    }
+                }
                 if(tmpToSplit == null){
-                    System.out.println("Found non expected value at:" + (String) curr);
+                    if(curr instanceof String){
+                        System.out.println("Found non expected value at:" + (String) curr);
+                    }
+                    else{
+                        System.out.println("Found non expected value at: " + ((Token) curr).getRaw());
+                    }
+
                     error = true;
                     return;
                 }
                 String[] prod = tmpToSplit.split(" ");
-                if(Token.genToken(topStack) != null && !tmpToSplit.equals("")){
+                if(Token.genToken(topStack) != null ){
                     pointerT = pointerT.insert(Token.genToken(topStack));
                     if (pointerT == null){
                         System.out.println("Parsing Error");
