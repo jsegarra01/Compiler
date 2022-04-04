@@ -10,7 +10,7 @@ var_ass ::= id = <math_exp> ;
 math_exp ::= <math> <math_exp_ex>
 math_exp_ex ::= null | <math_op1> <math> <math_exp_ex>
 math ::= <math_fac> <math_ex>
-math_ex ::= null | <math_op2> <math_fac>
+math_ex ::= null | <math_op2> <math>
 math_fac ::= <lit_iden> | ( <math_exp> )
 math_op1 ::= + | -
 math_op2 ::= * | /
