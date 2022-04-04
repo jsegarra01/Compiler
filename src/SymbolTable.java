@@ -147,10 +147,16 @@ public class SymbolTable {
     }
 
     private ArrayList<String> findFollow(String in, ArrayList<String> vars){
+        ArrayList<String> tmp = new ArrayList<>();
+        return findFollow(in, vars, tmp);
+    }
+
+    private ArrayList<String> findFollow(String in, ArrayList<String> vars, ArrayList<String> visited){
         ArrayList<String> out = new ArrayList<>();
+        visited.add(in);
         String trg = dirtyVar(in);
         for (String currVar: vars) {
-            if (!currVar.equals(in)) {
+            if (!currVar.equals(in) && !visited.contains(currVar)) {
                 for (String currProd : grammar.get(currVar)) {
                     if (currProd.contains(trg)) {
                         String[] seq = currProd.split(" ");
@@ -162,7 +168,7 @@ public class SymbolTable {
                                         if (follows.containsKey(currVar)) {
                                             nonRepetitionJoin(out, follows.get(currVar));
                                         } else {
-                                            follows.put(currVar, findFollow(currVar, vars));
+                                            follows.put(currVar, findFollow(currVar, vars, visited));
                                             nonRepetitionJoin(out, follows.get(currVar));
                                         }
                                         placed = true;
