@@ -17,7 +17,8 @@ math_op2 ::= * | /
 lit_iden ::= id | lit
 if_stat ::= if ( <bool_exp> ) { <ccode> } <else_stat>
 else_stat ::= null | else { <ccode> }
-bool_exp ::= <bool_stat> <bool_chain>
-bool_chain ::= null | && <bool_exp> | || <bool_exp>
+bool_exp ::= <bool_stat> <bool_chain_ex>
+bool_chain_ex ::= null | <bool_chain> <bool_exp>
+bool_chain ::= && | ||
 bool_stat ::= <lit_iden> <bool_op> <lit_iden>
 bool_op ::= == | < | > | !=
