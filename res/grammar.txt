@@ -1,11 +1,11 @@
-start { } null var type id ; = lit * / + - ( )
+start { } null var type id ; = lit * / + - ( ) if else && || == < > !=
 program ::= <main_space>
 main_space ::= start { <code> }
 code ::= <var_decs> <ccode>
 var_decs ::= <var_dec> <var_decs> | null
 var_dec ::= var type id <var_dec_extra>
 var_dec_extra ::= ; | = lit ;
-ccode ::= <var_ass> <ccode> | null
+ccode ::= <var_ass> <ccode> | <if_stat> <ccode> | null
 var_ass ::= id = <math_exp> ;
 math_exp ::= <math> <math_exp_ex>
 math_exp_ex ::= null | <math_op1> <math> <math_exp_ex>
@@ -15,3 +15,9 @@ math_fac ::= <lit_iden> | ( <math_exp> )
 math_op1 ::= + | -
 math_op2 ::= * | /
 lit_iden ::= id | lit
+if_stat ::= if ( <bool_exp> ) { <ccode> } <else_stat>
+else_stat ::= null | else { <ccode> }
+bool_exp ::= <bool_stat> <bool_chain>
+bool_chain ::= null | && <bool_exp> | || <bool_exp>
+bool_stat ::= <lit_iden> <bool_op> <lit_iden>
+bool_op ::= == | < | > | !=
