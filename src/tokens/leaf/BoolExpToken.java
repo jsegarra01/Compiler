@@ -1,6 +1,7 @@
 package tokens.leaf;
 
 import tokens.CCodeToken;
+import tokens.IfToken;
 import tokens.Token;
 import tokens.terminal.*;
 
@@ -56,9 +57,13 @@ public class BoolExpToken extends Token {
                     in.setParent(this);
                     return this;
                 }
+                else if(in instanceof BoolExpToken){
+                    this.right = in;
+                    in.setParent(this);
+                    return in;
+                }
             }
             else{
-                //TODO will need to change
                 if(in instanceof CCodeToken){
                     return this.parent.insert(in);
                 }
@@ -73,12 +78,18 @@ public class BoolExpToken extends Token {
                         ((IfToken) this.parent).setCondition(tmp);
                     }
                     this.parent = tmp;
+                    tmp.op = in;
+                    in.setParent(tmp);
                     return tmp;
+                }
+                else{
+                    return null;
                 }
             }
         }
         catch (ClassCastException e){
             return null;
         }
+        return null;
     }
 }

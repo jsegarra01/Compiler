@@ -7,6 +7,11 @@ public class BoolChainToken extends Token {
         super.name="bool_chain";
     }
 
+    public BoolChainToken(String raw) {
+        super.name="bool_chain";
+        super.raw = raw;
+    }
+
     @Override
     public Object getChild() {
         return null;

@@ -20,10 +20,13 @@ public class CCodeToken extends Token{
     @Override
     public Token insert(Token in) {
         try {
-            if (in instanceof VarAssToken){
+            if (in instanceof VarAssToken || in instanceof IfToken){
                 code.add(in);
                 in.setParent(this);
                 return in;
+            }
+            else if (in instanceof ElseToken){
+                return code.get(code.size()-1);
             }
             else if (in instanceof CCodeToken){
                 return this;

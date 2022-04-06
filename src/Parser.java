@@ -1,11 +1,10 @@
-import tokens.terminal.OpToken;
+import tokens.terminal.*;
 import tokens.Token;
-import tokens.terminal.IdenToken;
-import tokens.terminal.LitToken;
-import tokens.terminal.TypeToken;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Parser {
@@ -13,6 +12,8 @@ public class Parser {
     private Scanner sc;
     private String[] typeTokens = {"int", "char", "float", "bool"};
     private String[] opTokens = {"+", "-", "*", "/"};
+    private String[] boolOps = {"==", "<", ">", "!="};
+    private String[] boolChains = {"||", "&&"};
     private boolean end;
 
     public Parser(String path) {
@@ -80,6 +81,13 @@ public class Parser {
         return false;
     }
 
+    private boolean isBoolOp(String word){
+        return Arrays.asList(boolOps).contains(word);
+    }
+    private boolean isBoolChain(String word){
+        return Arrays.asList(boolChains).contains(word);
+    }
+
     private Object identifyString(String undefined) {
         TypeToken typeToken = new TypeToken();
         OpToken opToken = new OpToken();
@@ -89,6 +97,8 @@ public class Parser {
 
         if (compareToKeyword(undefined, typeTokens, typeToken)) return typeToken;
         if (compareToKeyword(undefined, opTokens, opToken)) return opToken;
+        if (isBoolOp(undefined)) return new BoolToken(undefined);
+        if (isBoolChain(undefined)) return new BoolChainToken(undefined);
         if (isIdentifer(undefined, idenToken)) return idenToken;
         if (isLiteral(undefined, litToken)) return litToken;
 
