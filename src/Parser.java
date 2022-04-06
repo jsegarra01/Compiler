@@ -30,11 +30,12 @@ public class Parser {
         String content;
 
         if (sc.hasNext()){
-            content = sc.useDelimiter(" |\\n").next();
+            //content = sc.useDelimiter(" |\\n").next();
+            content = sc.next();
             while (content.equals("")){
                 content = sc.useDelimiter(" ").next();
             }
-            content = content.replace("\n", " ").replace("\r"," ");
+            content = content.replace("\n", "").replace("\r","");
             return identifyString(content);
         }
         else{

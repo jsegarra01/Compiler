@@ -7,12 +7,14 @@ import tokens.leaf.BoolExpToken;
 import java.util.ArrayList;
 
 public class IfToken extends Token {
+    private boolean codeEnable;
     protected BoolExpToken condition;
     protected CCodeToken ifCode;
     protected CCodeToken elseCode;
 
     public IfToken() {
         super.name = "if_stat";
+        this.codeEnable = false;
     }
 
     public void setCondition(BoolExpToken condition) {
@@ -45,7 +47,11 @@ public class IfToken extends Token {
                     return in;
                 }
             }
-            else if(elseCode == null){
+            else if (in instanceof ElseToken){
+                this.codeEnable = true;
+                return this;
+            }
+            else if(elseCode == null && codeEnable){
                 if(in instanceof CCodeToken){
                     elseCode = (CCodeToken) in;
                     in.setParent(this);
