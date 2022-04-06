@@ -35,7 +35,7 @@ public class IfToken extends Token {
                 if(in instanceof BoolExpToken){
                     condition = (BoolExpToken) in;
                     condition.setParent(this);
-                    return this;
+                    return condition;
                 }
             }
             else if(ifCode == null){

@@ -34,7 +34,7 @@ public class Parser {
             while (content.equals("")){
                 content = sc.useDelimiter(" ").next();
             }
-            content = content.replace("\n", "").replace("\r","");
+            content = content.replace("\n", " ").replace("\r"," ");
             return identifyString(content);
         }
         else{

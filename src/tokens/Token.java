@@ -1,5 +1,6 @@
 package tokens;
 
+import tokens.leaf.BoolExpToken;
 import tokens.leaf.MathToken;
 import tokens.leaf.VarAssToken;
 import tokens.leaf.VarDecToken;
@@ -51,6 +52,9 @@ public class Token {
             case "ccode" -> new CCodeToken();
             case "var_ass" -> new VarAssToken();
             case "math_exp" -> new MathToken();
+            case "if_stat" -> new IfToken();
+            case "else_stat" -> new ElseToken();
+            case "bool_exp" -> new BoolExpToken();
             default -> null;
         };
     }
