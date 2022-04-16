@@ -4,7 +4,7 @@ public class Controller {
     private TreeBuilder tb;
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test4.ap");
+        this.parser = new Parser("res/test7.ap");
         this.tb = new TreeBuilder(parser, st);
     }
 
