@@ -66,7 +66,7 @@ public class Parser {
     }
 
     private boolean isIdentifer(String word, Token token) {
-        if('$' == word.charAt(0)) {
+        if('$' == word.charAt(0) && word.length() > 1) {
             token.setRaw(word.substring(1));
             return true;
         } else return false;
