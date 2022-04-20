@@ -1,5 +1,9 @@
 package tokens;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 public class ProgramToken extends Token{
     protected MainToken main;
 
@@ -26,5 +30,10 @@ public class ProgramToken extends Token{
         catch (ClassCastException e){
             return null;
         }
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        return main.getTac(writer);
     }
 }

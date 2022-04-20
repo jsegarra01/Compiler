@@ -5,8 +5,8 @@ import tokens.Token;
 import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class VarDecToken extends Token {
     protected TypeToken type;
@@ -57,5 +57,18 @@ public class VarDecToken extends Token {
             return null;
         }
         return null;
+    }
+    @Override
+    public String getTac(PrintWriter writer) {
+        String assignation;
+        if(value == null) {
+            assignation = "0";
+        }
+        else{
+            assignation = value.getRaw();
+        }
+        String finalDeclaration = identifier.getRaw() + " = " + assignation + " ;";
+        writer.println(finalDeclaration);
+        return finalDeclaration;
     }
 }
