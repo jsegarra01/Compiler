@@ -2,6 +2,7 @@ package tokens;
 
 import tokens.leaf.VarDecToken;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class VarDecsToken extends Token{
@@ -38,5 +39,13 @@ public class VarDecsToken extends Token{
         catch (ClassCastException e){
             return null;
         }
+    }
+    @Override
+    public String getTac(PrintWriter writer) {
+        StringBuilder fullTac = new StringBuilder();
+        for (VarDecToken varDecToken : code) {
+            fullTac.append(varDecToken.getTac(writer));
+        }
+        return fullTac.toString();
     }
 }

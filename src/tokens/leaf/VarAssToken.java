@@ -3,9 +3,10 @@ package tokens.leaf;
 import tokens.CCodeToken;
 import tokens.Token;
 import tokens.terminal.IdenToken;
-import tokens.terminal.LitToken;
-import tokens.terminal.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class VarAssToken extends Token {
@@ -54,5 +55,12 @@ public class VarAssToken extends Token {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer) + " ;";
+        writer.println(finalAssignation);
+        return finalAssignation;
     }
 }
