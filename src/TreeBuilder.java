@@ -1,4 +1,7 @@
 import tokens.Token;
+import tokens.terminal.IdenToken;
+import tokens.terminal.LitToken;
+import tokens.terminal.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,6 +122,46 @@ public class TreeBuilder {
         if(error){
             return;
         }
+        ArrayList<ArrayList<Token>> disp = parseTree();
+
+        for (ArrayList<Token> curr: disp){
+            for (Token tmp : curr){
+                if(tmp != null){
+                    System.out.print(tmp.getName() + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void semAnalysis(SemanticAnalyzer semanticAnalyzer) {
+        if(error){
+            return;
+        }
+        ArrayList<ArrayList<Token>> disp = parseTree();
+
+        for (ArrayList<Token> curr: disp){
+            boolean isVar = false;
+            Token aux = null;
+            for (Token tmp : curr){
+                if (isVar){
+                    if(!semanticAnalyzer.varCreated(tmp.getRaw(), (TypeToken) aux)) {
+                        System.out.println("Variable " + tmp.getRaw() + " already declared");
+                        return;
+                    }
+                    isVar = false;
+                }
+                if(tmp instanceof TypeToken){
+                    aux = tmp;
+                    isVar = true;
+                }
+            }
+
+        }
+    }
+
+    private ArrayList<ArrayList<Token>> parseTree() {
+
         ArrayList<ArrayList<Token>> disp = new ArrayList<>();
         int lvl = 0;
         boolean flag = true;
@@ -147,14 +190,7 @@ public class TreeBuilder {
                 lvl++;
             }
         }
-        for (ArrayList<Token> curr: disp){
-            for (Token tmp : curr){
-                if(tmp != null){
-                    System.out.print(tmp.getName() + " ");
-                }
-            }
-            System.out.println();
-        }
+        return disp;
     }
 
 
