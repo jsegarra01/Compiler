@@ -142,22 +142,44 @@ public class TreeBuilder {
 
         for (ArrayList<Token> curr: disp){
             boolean isVar = false;
+            boolean once = false;
             Token aux = null;
+            String key = null;
             for (Token tmp : curr){
                 if (isVar){
-                    if(!semanticAnalyzer.varCreated(tmp.getRaw(), (TypeToken) aux)) {
-                        System.out.println("Variable " + tmp.getRaw() + " already declared");
-                        return;
+                    if(once) key = tmp.getRaw();
+                    once = false;
+
+                    if (!(tmp instanceof LitToken) && !(tmp instanceof IdenToken)) { //TODO: fer be aquest if
+                        if(!semanticAnalyzer.varCreated(key, (TypeToken) aux)) {
+                            System.out.println("Variable " + key + " already declared");
+                            return;
+                        }
+                        isVar = false;
+                    } else {
+                        if(aux.getRaw().equals("bool")) {
+                            if(tmp instanceof LitToken && !(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        } else if(aux.getRaw().equals("char")){
+                            if(tmp instanceof LitToken && !((tmp.getRaw().charAt(0) > 'a' && tmp.getRaw().charAt(0) < 'z') ||(tmp.getRaw().charAt(0) > 'A' && tmp.getRaw().charAt(0) < 'Z'))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        } else {
+                            System.out.println("hola");
+                        }
                     }
-                    isVar = false;
                 }
                 if(tmp instanceof TypeToken){
                     aux = tmp;
                     isVar = true;
+                    once = true;
                 }
             }
-
         }
+        semanticAnalyzer.printAll();
     }
 
     private ArrayList<ArrayList<Token>> parseTree() {

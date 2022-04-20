@@ -36,4 +36,11 @@ public class SemanticAnalyzer {
         return semanticTable.containsKey(id);
     }
 
+    public void printAll() {
+        semanticTable.forEach((key, token) -> {
+            System.out.println("Variable " + key + ": has value -> " + token.getRaw());
+        });
+
+    }
+
 }
