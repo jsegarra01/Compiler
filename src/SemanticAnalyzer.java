@@ -43,4 +43,9 @@ public class SemanticAnalyzer {
 
     }
 
+    public Token getVar(String key) {
+        return semanticTable.get(key);
+
+    }
+
 }

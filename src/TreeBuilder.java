@@ -1,7 +1,7 @@
 import tokens.Token;
-import tokens.terminal.IdenToken;
-import tokens.terminal.LitToken;
-import tokens.terminal.TypeToken;
+import tokens.leaf.BoolExpToken;
+import tokens.leaf.MathToken;
+import tokens.terminal.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,16 +139,72 @@ public class TreeBuilder {
             return;
         }
         ArrayList<ArrayList<Token>> disp = parseTree();
+        Token aux = null;
+        boolean calling = false;
 
         for (ArrayList<Token> curr: disp){
             boolean isVar = false;
             boolean once = false;
-            Token aux = null;
+            boolean auxCall = false;
+
             String key = null;
             for (Token tmp : curr){
+                if(tmp instanceof IdenToken && !isVar && !auxCall) {
+                    aux = tmp;
+                    if(semanticAnalyzer.getVar(tmp.getRaw()) == null) {
+                        System.out.println("Semantic error");
+                        return;
+                    }
+                    auxCall = true;
+                } else if (calling) {
+                    if (tmp instanceof IdenToken) {
+                        if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
+                            System.out.println("Semantic error");
+                            return;
+                        }
+                    } else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("char")) {
+                        if (tmp instanceof OpToken || tmp instanceof BoolToken || tmp instanceof BoolExpToken || tmp instanceof BoolChainToken) {
+                            System.out.println("Semantic error");
+                            return;
+                        }
+                        if (tmp instanceof LitToken) {
+                            if (Character.isDigit(tmp.getRaw().charAt(0))) {
+                                System.out.println("Semantic error"); //TODO fer que pasi amb '' aixi nomes haure de mirar si charAt(0) es '
+                                return;
+                            }
+                        }
+                    }
+                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("bool")) {
+                        if (tmp instanceof OpToken) {
+                            System.out.println("Semantic error");
+                            return;
+                        }
+                    }
+                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("int") || semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("float")) {
+                        if (tmp instanceof BoolToken || tmp instanceof BoolExpToken || tmp instanceof BoolChainToken) {
+                            System.out.println("Semantic error");
+                            return;
+                        }
+                        if (tmp instanceof LitToken) {
+                            if (!Character.isDigit(tmp.getRaw().charAt(0))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        }
+                    }
+                }
+                else if (tmp instanceof MathToken && auxCall){
+                    calling = true;
+                } else if (auxCall){
+                    if (!(tmp instanceof BoolToken)) {
+                        auxCall = false;
+                    } else {
+                        //codi de if aqui
+                    }
+                }
                 if (isVar){
                     if(once) key = tmp.getRaw();
-                    once = false;
+
 
                     if (!(tmp instanceof LitToken) && !(tmp instanceof IdenToken)) { //TODO: fer be aquest if
                         if(!semanticAnalyzer.varCreated(key, (TypeToken) aux)) {
@@ -157,20 +213,34 @@ public class TreeBuilder {
                         }
                         isVar = false;
                     } else {
+                        if(tmp instanceof IdenToken  && !once) {
+                            if (!semanticAnalyzer.getVar(tmp.getRaw()).getRaw().equals(aux.getRaw()))   {
+                                 System.out.println("Semantic error" + tmp.getRaw() + aux.getRaw());
+                                 return;
+                            }
+                        }
                         if(aux.getRaw().equals("bool")) {
                             if(tmp instanceof LitToken && !(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
                                 System.out.println("Semantic error");
                                 return;
                             }
                         } else if(aux.getRaw().equals("char")){
-                            if(tmp instanceof LitToken && !((tmp.getRaw().charAt(0) > 'a' && tmp.getRaw().charAt(0) < 'z') ||(tmp.getRaw().charAt(0) > 'A' && tmp.getRaw().charAt(0) < 'Z'))) {
-                                System.out.println("Semantic error");
-                                return;
+                            if(tmp instanceof LitToken) {
+                                if (Character.isDigit(tmp.getRaw().charAt(0))) {
+                                    System.out.println("Semantic error");
+                                    return;
+                                }
                             }
                         } else {
-                            System.out.println("hola");
+                            if(tmp instanceof LitToken) {
+                                if (!Character.isDigit(tmp.getRaw().charAt(0))) {
+                                    System.out.println("Semantic error");
+                                    return;
+                                }
+                            }
                         }
                     }
+                    once = false;
                 }
                 if(tmp instanceof TypeToken){
                     aux = tmp;
