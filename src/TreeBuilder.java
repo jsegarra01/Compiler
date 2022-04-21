@@ -146,17 +146,57 @@ public class TreeBuilder {
             boolean isVar = false;
             boolean once = false;
             boolean auxCall = false;
+            boolean auxCall2 = false;
+            boolean boolOp = false;
 
             String key = null;
             for (Token tmp : curr){
-                if(tmp instanceof IdenToken && !isVar && !auxCall) {
+                if (boolOp) {
+                    if (tmp instanceof IdenToken) {
+                        if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
+                            System.out.println("Semantic error");
+                            return;
+                        }
+                    } else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("char")) {
+                        if (tmp instanceof LitToken) {
+                            if (Character.isDigit(tmp.getRaw().charAt(0))) {
+                                System.out.println("Semantic error"); //TODO fer que pasi amb '' aixi nomes haure de mirar si charAt(0) es '
+                                return;
+                            }
+                            if ((tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        }
+                    }
+                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("bool")) {
+                        if (tmp instanceof LitToken) {
+                            if (!(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        }
+                    }
+                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("int") || semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("float")) {
+                        if (tmp instanceof LitToken) {
+                            if (!Character.isDigit(tmp.getRaw().charAt(0))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        }
+                    }
+
+                }
+                else if(tmp instanceof IdenToken && !isVar && !auxCall) {
                     aux = tmp;
                     if(semanticAnalyzer.getVar(tmp.getRaw()) == null) {
                         System.out.println("Semantic error");
                         return;
                     }
                     auxCall = true;
-                } else if (calling) {
+                } else if (calling || auxCall2) {
+                    auxCall2 = true;
+                    calling = false;
                     if (tmp instanceof IdenToken) {
                         if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
                             System.out.println("Semantic error");
@@ -179,6 +219,12 @@ public class TreeBuilder {
                             System.out.println("Semantic error");
                             return;
                         }
+                        if (tmp instanceof LitToken) {
+                            if (!(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
+                                System.out.println("Semantic error");
+                                return;
+                            }
+                        }
                     }
                     else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("int") || semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("float")) {
                         if (tmp instanceof BoolToken || tmp instanceof BoolExpToken || tmp instanceof BoolChainToken) {
@@ -199,7 +245,7 @@ public class TreeBuilder {
                     if (!(tmp instanceof BoolToken)) {
                         auxCall = false;
                     } else {
-                        //codi de if aqui
+                        boolOp = true;
                     }
                 }
                 if (isVar){
