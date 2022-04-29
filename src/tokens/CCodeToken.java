@@ -23,7 +23,7 @@ public class CCodeToken extends Token{
     @Override
     public Token insert(Token in) {
         try {
-            if (in instanceof VarAssToken || in instanceof IfToken){
+            if (in instanceof VarAssToken || in instanceof IfToken || in instanceof LoopToken){
                 code.add(in);
                 in.setParent(this);
                 return in;
