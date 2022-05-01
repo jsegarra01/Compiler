@@ -67,6 +67,7 @@ public class Token {
             case "if_stat" -> new IfToken();
             case "else_stat" -> new ElseToken();
             case "bool_exp" -> new BoolExpToken();
+            case "loop_stat" -> new LoopToken();
             default -> null;
         };
     }
