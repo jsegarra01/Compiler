@@ -80,6 +80,7 @@ public class IfToken extends Token {
         }
         else {
             print = condition.getTac(writer);
+            //writer.println("IF !(" + print + ")" + " GOTO L" + condition.getLabel());
             ifCode.getTac(writer);
             writer.println("GOTO L" + (condition.getLabel() + 1));
             writer.println(print);
