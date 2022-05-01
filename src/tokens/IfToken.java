@@ -72,6 +72,7 @@ public class IfToken extends Token {
     }
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        condition.setIsLoop(false);
         String print;
         if(elseCode == null) {
             print = condition.getTac(writer);
@@ -80,7 +81,6 @@ public class IfToken extends Token {
         }
         else {
             print = condition.getTac(writer);
-            //writer.println("IF !(" + print + ")" + " GOTO L" + condition.getLabel());
             ifCode.getTac(writer);
             writer.println("GOTO L" + (condition.getLabel() + 1));
             writer.println(print);

@@ -16,6 +16,7 @@ public class BoolExpToken extends Token {
     private Token op;
     private Token right;
     private static int conditionPart;
+    private static boolean isLoop;
 
     public BoolExpToken() {
         super.name="bool_exp";
@@ -115,12 +116,23 @@ public class BoolExpToken extends Token {
             conditionPart++;
             return "t" + (conditionPart - 1);
         }
-        increaseLabelIteration();
-        writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
-        return "L" + getLabelIteration() + ":";
+        if(isLoop) {
+            increaseLabelIteration();
+            writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + (getLabelIteration() + 1));
+            return "L" + getLabelIteration() + ":";
+        }
+        else{
+            increaseLabelIteration();
+            writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
+            return "L" + getLabelIteration() + ":";
+        }
+
     }
     public int getLabel() {
         return getLabelIteration();
     }
 
+    public void setIsLoop(boolean input) {
+        isLoop = input;
+    }
 }
