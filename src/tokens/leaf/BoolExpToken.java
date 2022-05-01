@@ -5,6 +5,9 @@ import tokens.IfToken;
 import tokens.Token;
 import tokens.terminal.*;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class BoolExpToken extends Token {
@@ -91,5 +94,21 @@ public class BoolExpToken extends Token {
             return null;
         }
         return null;
+    }
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String leftDisplay;
+        String rightDisplay;
+        leftDisplay = left.getRaw();
+        rightDisplay = right.getRaw();
+        if(left.getClass() == BoolExpToken.class) {
+            leftDisplay = left.getTac(writer);
+        }
+        if(right.getClass() == BoolExpToken.class){
+            rightDisplay = right.getTac(writer);
+        }
+        increaseLabelIteration();
+        writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
+        return "L" + getLabelIteration() + ":";
     }
 }

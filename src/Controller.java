@@ -1,6 +1,4 @@
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class Controller {
@@ -11,7 +9,7 @@ public class Controller {
 
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test4.ap");
+        this.parser = new Parser("res/test5.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
     }

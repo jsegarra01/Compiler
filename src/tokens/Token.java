@@ -15,12 +15,18 @@ public class Token {
     protected Token parent;
     protected Token child;
     private static int iteration;
+    private static int labelIteration;
     static {
         iteration = 0;
+        labelIteration = 0;
     }
 
     public static void increaseIteration() {
         iteration++;
+    }
+
+    public static void increaseLabelIteration() {
+        labelIteration++;
     }
 
     public Token() {
@@ -84,5 +90,8 @@ public class Token {
 
     public static int getIteration() {
         return iteration;
+    }
+    public static int getLabelIteration() {
+        return labelIteration;
     }
 }

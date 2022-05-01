@@ -4,6 +4,9 @@ import tokens.CCodeToken;
 import tokens.Token;
 import tokens.leaf.BoolExpToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class IfToken extends Token {
@@ -66,5 +69,21 @@ public class IfToken extends Token {
             return null;
         }
         return null;
+    }
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String print;
+        if(elseCode == null) {
+            print = condition.getTac(writer);
+            ifCode.getTac(writer);
+            writer.println(print);
+        }
+        else {
+            print = condition.getTac(writer);
+            ifCode.getTac(writer);
+            writer.println(print);
+            elseCode.getTac(writer);
+        }
+        return print;
     }
 }
