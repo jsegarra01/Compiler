@@ -124,18 +124,27 @@ public class MathToken extends Token {
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
         String leftDisplay;
-        String rightDisplay;
+        String rightDisplay = null;
+        String mathStep;
+        
         leftDisplay = left.getRaw();
-        rightDisplay = right.getRaw();
-        if(left.getClass() == MathToken.class) {
-            leftDisplay = left.getTac(writer);
+        if(op != null) {
+            rightDisplay = right.getRaw();
+            if(left.getClass() == MathToken.class) {
+                leftDisplay = left.getTac(writer);
+            }
+            if(right.getClass() == MathToken.class){
+                rightDisplay = right.getTac(writer);
+            }
+            increaseIteration();
         }
-        if(right.getClass() == MathToken.class){
-            rightDisplay = right.getTac(writer);
-        }
-        increaseIteration();
 
-        String mathStep = "t" + getIteration() + " = " + leftDisplay + " " + op.getRaw() + " " + rightDisplay + " ;";
+        if(op == null){
+            mathStep = "t" + getIteration() + " = " + leftDisplay;
+        }
+        else {
+            mathStep = "t" + getIteration() + " = " + leftDisplay + " " + op.getRaw() + " " + rightDisplay + " ;";
+        }
         writer.println(mathStep);
         return "t" + getIteration();
     }

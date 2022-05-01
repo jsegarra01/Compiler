@@ -5,12 +5,17 @@ import tokens.IfToken;
 import tokens.Token;
 import tokens.terminal.*;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BoolExpToken extends Token {
     private Token left;
     private Token op;
     private Token right;
+    private static int conditionPart;
 
     public BoolExpToken() {
         super.name="bool_exp";
@@ -92,4 +97,30 @@ public class BoolExpToken extends Token {
         }
         return null;
     }
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String leftDisplay;
+        String rightDisplay;
+        leftDisplay = left.getRaw();
+        rightDisplay = right.getRaw();
+        if(left.getClass() == BoolExpToken.class) {
+            leftDisplay = left.getTac(writer);
+        }
+        if(right.getClass() == BoolExpToken.class){
+            rightDisplay = right.getTac(writer);
+        }
+
+        if(parent.getClass() == BoolExpToken.class) {
+            writer.println("t" + conditionPart + " = (" + leftDisplay + op.getRaw() + rightDisplay + ")");
+            conditionPart++;
+            return "t" + (conditionPart - 1);
+        }
+        increaseLabelIteration();
+        writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
+        return "L" + getLabelIteration() + ":";
+    }
+    public int getLabel() {
+        return getLabelIteration();
+    }
+
 }
