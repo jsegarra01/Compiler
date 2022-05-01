@@ -1,18 +1,18 @@
 t0 = (a==1)
 t1 = (a<1)
 t2 = (a==4)
-IF !(t1||t2) GOTO L1
-IF !(t0&&L1:) GOTO L2
-IF !(a==1) GOTO L3
+t3 = (t1||t2)
+IF !(t0&&t3) GOTO L1
+IF !(a==1) GOTO L2
 t0 = 2
 b = t0 ;
-L3:
+L2:
 t0 = 2
 a = t0 ;
-GOTO L4
-L2:
+GOTO L3
+L1:
 t0 = 1
 a = t0 ;
-L4:
+L3:
 t0 = 3
 a = t0 ;

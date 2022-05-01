@@ -16,7 +16,6 @@ public class BoolExpToken extends Token {
     private Token op;
     private Token right;
     private static int conditionPart;
-    private static boolean isCondition;
 
     public BoolExpToken() {
         super.name="bool_exp";
@@ -105,18 +104,13 @@ public class BoolExpToken extends Token {
         leftDisplay = left.getRaw();
         rightDisplay = right.getRaw();
         if(left.getClass() == BoolExpToken.class) {
-            isCondition = true;
             leftDisplay = left.getTac(writer);
-            isCondition = false;
         }
         if(right.getClass() == BoolExpToken.class){
-            isCondition = true;
             rightDisplay = right.getTac(writer);
-            isCondition = false;
         }
 
-
-        if(isCondition) {
+        if(parent.getClass() == BoolExpToken.class) {
             writer.println("t" + conditionPart + " = (" + leftDisplay + op.getRaw() + rightDisplay + ")");
             conditionPart++;
             return "t" + (conditionPart - 1);
