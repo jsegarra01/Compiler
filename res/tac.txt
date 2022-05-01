@@ -1,4 +1,12 @@
 IF !(a==1) GOTO L1
+IF !(a==1) GOTO L2
+t0 = 2
+b = t0 ;
+L2:
 t0 = 2
 a = t0 ;
+GOTO L3
 L1:
+t0 = 1
+a = t0 ;
+L3:

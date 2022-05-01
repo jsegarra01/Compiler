@@ -111,4 +111,7 @@ public class BoolExpToken extends Token {
         writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
         return "L" + getLabelIteration() + ":";
     }
+    public int getLabel() {
+        return getLabelIteration();
+    }
 }

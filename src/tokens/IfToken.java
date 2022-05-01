@@ -81,8 +81,10 @@ public class IfToken extends Token {
         else {
             print = condition.getTac(writer);
             ifCode.getTac(writer);
+            writer.println("GOTO L" + (condition.getLabel() + 1));
             writer.println(print);
             elseCode.getTac(writer);
+            writer.println("L" + (condition.getLabel() + 1) + ":");
         }
         return print;
     }
