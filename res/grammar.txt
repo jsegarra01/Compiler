@@ -1,5 +1,5 @@
-start { } null var type id ; = lit * / + - ( ) if else && || == < > != loop
-program ::= <main_space>
+start { } null var type id ; = lit * / + - ( ) if else && || == < > != loop func , return
+program ::= <func_space> <main_space>
 main_space ::= start { <code> }
 code ::= <var_decs> <ccode>
 var_decs ::= <var_dec> <var_decs> | null
@@ -24,3 +24,11 @@ bool_chain_ex ::= null | <bool_chain> <bool_exp>
 bool_chain ::= && | ||
 bool_stat ::= <lit_iden> <bool_op> <lit_iden>
 bool_op ::= == | < | > | !=
+func_space ::= <func_dec> <func_space> | null
+func_dec ::= func <type> <fidentifier> ( <func_exp> ) { <func_code> }
+func_exp ::= null | <func_foll>
+func_foll ::= <func_term> <func_foll_ex>
+func_foll_ex ::= null | , <func_foll>
+func_term ::= <type> <var_identifier>
+func_code ::= <code> <func_return>
+func_return ::= return <lit_iden> ;
