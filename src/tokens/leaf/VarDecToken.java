@@ -20,6 +20,18 @@ public class VarDecToken extends Token {
         this.value = null;
     }
 
+    public TypeToken getType() {
+        return type;
+    }
+
+    public IdenToken getIdentifier() {
+        return identifier;
+    }
+
+    public LitToken getValue() {
+        return value;
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();

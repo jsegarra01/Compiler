@@ -1,6 +1,8 @@
 import tokens.Token;
 import tokens.leaf.BoolExpToken;
 import tokens.leaf.MathToken;
+import tokens.leaf.VarAssToken;
+import tokens.leaf.VarDecToken;
 import tokens.terminal.*;
 
 import java.util.ArrayList;
@@ -139,19 +141,31 @@ public class TreeBuilder {
             return;
         }
         ArrayList<ArrayList<Token>> disp = parseTree();
-        Token aux = null;
-        boolean calling = false;
 
         for (ArrayList<Token> curr: disp){
-            boolean isVar = false;
-            boolean once = false;
-            boolean auxCall = false;
-            boolean auxCall2 = false;
-            boolean boolOp = false;
-
-            String key = null;
             for (Token tmp : curr){
-                if (boolOp) {
+                if(tmp instanceof VarDecToken) {
+                    if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, "0")) {
+                        System.out.println("Semantic error");
+                        return;
+                    }
+                }
+
+                if(tmp instanceof VarAssToken) {
+                    if(!semanticAnalyzer.varAssValidate((VarAssToken) tmp, "0")) {
+                        System.out.println("Semantic error");
+                        return;
+                    }
+                }
+
+                if(tmp instanceof BoolExpToken) {
+                    if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, "0")) {
+                        System.out.println("Semantic error");
+                        return;
+                    }
+                }
+
+                /*if (boolOp) {
                     if (tmp instanceof IdenToken) {
                         if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
                             System.out.println("Semantic error");
@@ -292,7 +306,7 @@ public class TreeBuilder {
                     aux = tmp;
                     isVar = true;
                     once = true;
-                }
+                }*/
             }
         }
         semanticAnalyzer.printAll();

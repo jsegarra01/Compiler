@@ -18,6 +18,18 @@ public class MathToken extends Token {
         super.name = "math";
     }
 
+    public Token getLeft() {
+        return left;
+    }
+
+    public OpToken getOp() {
+        return op;
+    }
+
+    public Token getRight() {
+        return right;
+    }
+
     public void replace(Token trg, Token value){
         if(this.left == trg){
             this.left = value;

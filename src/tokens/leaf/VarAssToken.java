@@ -16,6 +16,14 @@ public class VarAssToken extends Token {
         super.name = "var_ass";
     }
 
+    public IdenToken getId() {
+        return id;
+    }
+
+    public MathToken getValue() {
+        return value;
+    }
+
     public void setValue(MathToken value) {
         this.value = value;
     }
