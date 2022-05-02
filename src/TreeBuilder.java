@@ -158,12 +158,12 @@ public class TreeBuilder {
                     }
                 }
 
-                if(tmp instanceof BoolExpToken) {
+                /*if(tmp instanceof BoolExpToken) {
                     if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, "0")) {
                         System.out.println("Semantic error");
                         return;
                     }
-                }
+                }*/
 
                 /*if (boolOp) {
                     if (tmp instanceof IdenToken) {

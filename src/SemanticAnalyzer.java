@@ -3,15 +3,14 @@ import tokens.leaf.BoolExpToken;
 import tokens.leaf.MathToken;
 import tokens.leaf.VarAssToken;
 import tokens.leaf.VarDecToken;
+import tokens.terminal.BoolToken;
 import tokens.terminal.IdenToken;
+import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class SemanticAnalyzer {
@@ -77,34 +76,62 @@ public class SemanticAnalyzer {
     }
 
     private boolean mathExpValidate(MathToken token, String type) {
-        if(token.getLeft() instanceof IdenToken) {
-            if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
-            if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
-        }
-        if(token.getRight() instanceof IdenToken) {
-            if(!semanticTable.containsKey(token.getRight().getRaw())) return false;
-            if(!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
-        }
+
         switch (type) {
             case "char":
-                if (Character.isDigit(token.getValue().getRaw().charAt(0))) return false;
-                if ((token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false"))) return false;
+                if(token.getLeft() instanceof IdenToken) {
+                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                }
+                else {
+                    if(!(token.getLeft() instanceof LitToken)) return false;
+                    if (Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
+                    if ((token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false"))) return false;
+                }
+                if(token.getOp() != null) return false;
+                if(token.getRight() != null) return false;
 
                 break;
             case "bool":
-                if (!(token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false"))) return false;
+                if(token.getLeft() instanceof IdenToken) {
+                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                }
+                else {
+                    if(!(token.getLeft() instanceof LitToken)) return false;
+                    if (!(token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false"))) return false;
+                }
+                if(token.getOp() != null) return false;
+                if(token.getRight() != null) return false;
 
                 break;
             default:
-                if (!Character.isDigit(token.getValue().getRaw().charAt(0))) return false;
+                if(token.getLeft() instanceof IdenToken) {
+                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                } else {
+                    if (!Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
+
+                }
+
+                if(token.getRight() instanceof MathToken) {
+                    return mathExpValidate((MathToken) token.getRight(), type);
+                } else {
+                    if(token.getRight() instanceof IdenToken) {
+                        if(!semanticTable.containsKey(token.getRight().getRaw())) return false;
+                        if(!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
+                    } else {
+                        if (!Character.isDigit(token.getRight().getRaw().charAt(0)) && token.getRight() != null) return false;
+                    }
+                }
 
                 break;
         }
         return true;
     }
 
-    public boolean boolExpValidate(BoolExpToken token, String scope) {
+    //public boolean boolExpValidate(BoolExpToken token, String scope) {
 
-    }
+    //}
 
     }
