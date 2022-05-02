@@ -2,6 +2,9 @@ package tokens;
 
 import tokens.leaf.BoolExpToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class LoopToken extends Token{
@@ -45,5 +48,17 @@ public class LoopToken extends Token{
             return null;
         }
         return null;
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        condition.setIsLoop(true);
+        writer.println("L" + (condition.getLabel() + 1) + ":");
+        String print = condition.getTac(writer);
+        code.getTac(writer);
+        writer.println("GOTO L" + condition.getLabel());
+        increaseLabelIteration();
+        writer.println("L" + (condition.getLabel()) + ":");
+        return print;
     }
 }
