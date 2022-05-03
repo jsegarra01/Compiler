@@ -14,7 +14,7 @@ import java.util.*;
 
 
 public class SemanticAnalyzer {
-    private HashMap<String , ArrayList<String>> semanticTable;
+    private HashMap<String, ArrayList<String>> semanticTable;
 
 
     public SemanticAnalyzer() {
@@ -23,7 +23,7 @@ public class SemanticAnalyzer {
 
     public boolean varCreated(String type, String id, String scope) {
 
-        if(semanticTable.containsKey(id)) return false;
+        if (semanticTable.containsKey(id)) return false;
 
         ArrayList<String> tmp = new ArrayList<>();
         tmp.add(type);
@@ -49,16 +49,18 @@ public class SemanticAnalyzer {
     }
 
     public boolean varDecValidate(VarDecToken token, String scope) {
-        if(!varCreated(token.getType().getRaw(), token.getIdentifier().getRaw(), scope)) return false;
+        if (!varCreated(token.getType().getRaw(), token.getIdentifier().getRaw(), scope)) return false;
 
         switch (token.getType().getRaw()) {
             case "char":
                 if (Character.isDigit(token.getValue().getRaw().charAt(0))) return false;
-                if ((token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false"))) return false;
+                if ((token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false")))
+                    return false;
 
                 break;
             case "bool":
-                if (!(token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false"))) return false;
+                if (!(token.getValue().getRaw().equals("true") || token.getValue().getRaw().equals("false")))
+                    return false;
 
                 break;
             default:
@@ -70,7 +72,7 @@ public class SemanticAnalyzer {
     }
 
     public boolean varAssValidate(VarAssToken token, String scope) {
-        if(!semanticTable.containsKey(token.getId().getRaw())) return false;
+        if (!semanticTable.containsKey(token.getId().getRaw())) return false;
 
         return mathExpValidate(token.getValue(), semanticTable.get(token.getId().getRaw()).get(0));
     }
@@ -79,49 +81,50 @@ public class SemanticAnalyzer {
 
         switch (type) {
             case "char":
-                if(token.getLeft() instanceof IdenToken) {
-                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
-                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
-                }
-                else {
-                    if(!(token.getLeft() instanceof LitToken)) return false;
+                if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                } else {
+                    if (!(token.getLeft() instanceof LitToken)) return false;
                     if (Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
-                    if ((token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false"))) return false;
+                    if ((token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false")))
+                        return false;
                 }
-                if(token.getOp() != null) return false;
-                if(token.getRight() != null) return false;
+                if (token.getOp() != null) return false;
+                if (token.getRight() != null) return false;
 
                 break;
             case "bool":
-                if(token.getLeft() instanceof IdenToken) {
-                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
-                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                } else {
+                    if (!(token.getLeft() instanceof LitToken)) return false;
+                    if (!(token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false")))
+                        return false;
                 }
-                else {
-                    if(!(token.getLeft() instanceof LitToken)) return false;
-                    if (!(token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false"))) return false;
-                }
-                if(token.getOp() != null) return false;
-                if(token.getRight() != null) return false;
+                if (token.getOp() != null) return false;
+                if (token.getRight() != null) return false;
 
                 break;
             default:
-                if(token.getLeft() instanceof IdenToken) {
-                    if(!semanticTable.containsKey(token.getLeft().getRaw())) return false;
-                    if(!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
                 } else {
                     if (!Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
 
                 }
 
-                if(token.getRight() instanceof MathToken) {
+                if (token.getRight() instanceof MathToken) {
                     return mathExpValidate((MathToken) token.getRight(), type);
                 } else {
-                    if(token.getRight() instanceof IdenToken) {
-                        if(!semanticTable.containsKey(token.getRight().getRaw())) return false;
-                        if(!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
+                    if (token.getRight() instanceof IdenToken) {
+                        if (!semanticTable.containsKey(token.getRight().getRaw())) return false;
+                        if (!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
                     } else {
-                        if (!Character.isDigit(token.getRight().getRaw().charAt(0)) && token.getRight() != null) return false;
+                        if (!Character.isDigit(token.getRight().getRaw().charAt(0)) && token.getRight() != null)
+                            return false;
                     }
                 }
 
@@ -130,8 +133,88 @@ public class SemanticAnalyzer {
         return true;
     }
 
-    //public boolean boolExpValidate(BoolExpToken token, String scope) {
+    public boolean boolExpValidate(BoolExpToken token, String scope, String type) {
 
-    //}
+        switch (type) {
+            case "char":
+                if (token.getLeft() instanceof BoolExpToken) {
+                    if(!boolExpValidate((BoolExpToken) token.getLeft(), scope, type)) return false;
+                } else if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                } else {
+                    if (!(token.getLeft() instanceof LitToken)) return false;
+                    if (Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
+                    if ((token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false")))
+                        return false;
+                }
 
+                if(token.getRight() instanceof BoolExpToken){
+                    if(!boolExpValidate((BoolExpToken) token.getRight(), scope, type)) return false;
+                }
+                else if(token.getRight() != null){
+                    if (token.getRight() instanceof IdenToken) {
+                        if (!semanticTable.containsKey(token.getRight().getRaw())) return false;
+                        if (!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
+                    } else {
+                        if (!(token.getRight() instanceof LitToken)) return false;
+                        if (Character.isDigit(token.getRight().getRaw().charAt(0))) return false;
+                        if ((token.getRight().getRaw().equals("true") || token.getRight().getRaw().equals("false")))
+                            return false;
+                    }
+                }
+
+
+                break;
+            case "bool":
+                if (token.getLeft() instanceof BoolExpToken) {
+                    if(!boolExpValidate((BoolExpToken) token.getLeft(), scope, type)) return false;
+                } else if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                } else {
+                    if (!(token.getLeft() instanceof LitToken)) return false;
+                    if (!(token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false"))) return false;
+                }
+
+                if(token.getRight() instanceof BoolExpToken) {
+                    if(!boolExpValidate((BoolExpToken) token.getRight(), scope, type)) return false;
+                }
+                else if(token.getRight() != null){
+                    if (token.getRight() instanceof IdenToken) {
+                        if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                        if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                    } else {
+                        if (!(token.getRight() instanceof LitToken)) return false;
+                        if (!(token.getRight().getRaw().equals("true") || token.getRight().getRaw().equals("false"))) return false;
+                    }
+                }
+
+
+                break;
+            default:
+                if (token.getLeft() instanceof BoolExpToken) {
+                    if(!boolExpValidate((BoolExpToken) token.getLeft(), scope, type)) return false;
+                } else if (token.getLeft() instanceof IdenToken) {
+                    if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals("int") && !semanticTable.get(token.getLeft().getRaw()).get(0).equals("float")) return false;
+                } else {
+                    if (!Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
+                }
+
+                if (token.getRight() instanceof BoolExpToken) {
+                    if(!boolExpValidate((BoolExpToken) token.getRight(), scope, type)) return false;
+                } else {
+                    if (token.getRight() instanceof IdenToken) {
+                        if (!semanticTable.containsKey(token.getRight().getRaw())) return false;
+                        if (!semanticTable.get(token.getRight().getRaw()).get(0).equals("int") && !semanticTable.get(token.getRight().getRaw()).get(0).equals("float")) return false;
+                    } else {
+                        if (!Character.isDigit(token.getRight().getRaw().charAt(0)) && token.getRight() != null) return false;
+                    }
+                }
+                break;
+        }
+        return true;
     }
+
+}

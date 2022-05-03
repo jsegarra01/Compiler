@@ -16,6 +16,18 @@ public class BoolExpToken extends Token {
         super.name="bool_exp";
     }
 
+    public Token getLeft() {
+        return left;
+    }
+
+    public Token getOp() {
+        return op;
+    }
+
+    public Token getRight() {
+        return right;
+    }
+
     public void replace(Token trg, Token value){
         if(this.left == trg){
             this.left = value;

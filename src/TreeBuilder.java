@@ -158,12 +158,19 @@ public class TreeBuilder {
                     }
                 }
 
-                /*if(tmp instanceof BoolExpToken) {
-                    if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, "0")) {
+                if(tmp instanceof BoolExpToken) {
+                    String type = "int";
+                    Token aux = ((BoolExpToken) tmp).getLeft();
+                    if(aux instanceof IdenToken) type = aux.getRaw();
+                    if(aux instanceof LitToken) {
+                        if(!Character.isDigit(aux.getRaw().charAt(0))) type = "char";
+                        if(aux.getRaw().equals("true") || aux.getRaw().equals("false")) type = "bool";
+                    }
+                    if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, "0", type)) {
                         System.out.println("Semantic error");
                         return;
                     }
-                }*/
+                }
 
                 /*if (boolOp) {
                     if (tmp instanceof IdenToken) {
