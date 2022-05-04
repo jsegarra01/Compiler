@@ -1,9 +1,6 @@
 package tokens;
 
-import tokens.leaf.BoolExpToken;
-import tokens.leaf.MathToken;
-import tokens.leaf.VarAssToken;
-import tokens.leaf.VarDecToken;
+import tokens.leaf.*;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -74,6 +71,9 @@ public class Token {
             case "else_stat" -> new ElseToken();
             case "bool_exp" -> new BoolExpToken();
             case "loop_stat" -> new LoopToken();
+            case "func_space" -> new FunctionsToken();
+            case "func_dec" -> new FuncToken();
+            case "func_term" -> new ArgsToken();
             default -> null;
         };
     }

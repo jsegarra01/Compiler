@@ -11,7 +11,7 @@ public class Controller {
 
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test9.ap");
+        this.parser = new Parser("res/test10.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
     }
@@ -19,7 +19,7 @@ public class Controller {
     public void compile() throws FileNotFoundException, UnsupportedEncodingException {
         tb.run();
         tb.printTree();
-        tac.generate(tb);
+        //tac.generate(tb);
         System.out.println("TAC file successfully created.");
     }
 }
