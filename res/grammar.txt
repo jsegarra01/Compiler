@@ -25,10 +25,10 @@ bool_chain ::= && | ||
 bool_stat ::= <lit_iden> <bool_op> <lit_iden>
 bool_op ::= == | < | > | !=
 func_space ::= <func_dec> <func_space> | null
-func_dec ::= func <type> <fidentifier> ( <func_exp> ) { <func_code> }
+func_dec ::= func <type> id ( <func_exp> ) { <func_code> }
 func_exp ::= null | <func_foll>
 func_foll ::= <func_term> <func_foll_ex>
 func_foll_ex ::= null | , <func_foll>
-func_term ::= <type> <var_identifier>
+func_term ::= type id
 func_code ::= <code> <func_return>
 func_return ::= return <lit_iden> ;
