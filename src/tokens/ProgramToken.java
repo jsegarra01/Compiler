@@ -3,6 +3,7 @@ package tokens;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class ProgramToken extends Token{
     protected FunctionsToken functions;
@@ -14,7 +15,10 @@ public class ProgramToken extends Token{
 
     @Override
     public Object getChild() {
-        return this.main;
+        ArrayList<Token> tmp = new ArrayList<>();
+        tmp.add(functions);
+        tmp.add(main);
+        return tmp;
     }
 
     public String getName() {

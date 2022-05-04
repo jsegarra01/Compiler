@@ -2,6 +2,7 @@ package tokens;
 
 import tokens.leaf.ArgsToken;
 import tokens.terminal.IdenToken;
+import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ public class FuncToken extends Token{
     protected TypeToken type;
     protected IdenToken id;
     protected ArrayList<ArgsToken> args;
-    protected CCodeToken code;
+    protected CodeToken code;
+    protected Token returnToken;
     private boolean argsDone;
 
     public FuncToken() {
@@ -26,6 +28,7 @@ public class FuncToken extends Token{
         tmp.add(id);
         tmp.addAll(args);
         tmp.add(code);
+        tmp.add(returnToken);
         return tmp;
     }
 
@@ -47,11 +50,21 @@ public class FuncToken extends Token{
                 in.setParent(this);
                 return in;
             }
-            else if(in instanceof CCodeToken){
+            else if(in instanceof CodeToken){
                 argsDone = true;
-                this.code = (CCodeToken) in;
+                this.code = (CodeToken) in;
                 in.setParent(this);
                 return in;
+            }
+            else if (returnToken == null){
+                if (in instanceof IdenToken || in instanceof LitToken){
+                    this.returnToken = in;
+                    in.parent = this;
+                    return this;
+                }
+                else{
+                    return null;
+                }
             }
             else {
                 return null;
