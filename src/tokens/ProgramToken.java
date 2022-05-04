@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class ProgramToken extends Token{
+    protected FunctionsToken functions;
     protected MainToken main;
 
     public ProgramToken() {
@@ -23,9 +24,19 @@ public class ProgramToken extends Token{
     @Override
     public Token insert(Token in) {
         try {
-            this.main = (MainToken) in;
-            this.main.setParent(this);
-            return this.main;
+            if (functions == null && in instanceof FunctionsToken){
+                this.functions = (FunctionsToken) in;
+                this.functions.setParent(this);
+                return this.functions;
+            }
+            else if (this.main == null && in instanceof MainToken) {
+                this.main = (MainToken) in;
+                this.main.setParent(this);
+                return this.main;
+            }
+            else{
+                return null;
+            }
         }
         catch (ClassCastException e){
             return null;
