@@ -71,6 +71,12 @@ public class Parser {
             return true;
         } else return false;
     }
+    private boolean isFIdentifer(String word, Token token) {
+        if('#' == word.charAt(0) && word.length() > 1) {
+            token.setRaw(word.substring(1));
+            return true;
+        } else return false;
+    }
 
     private boolean compareToKeyword(String word,String[] keywords, Token token) {
         for (String keyword: keywords) {
@@ -93,6 +99,7 @@ public class Parser {
         TypeToken typeToken = new TypeToken();
         OpToken opToken = new OpToken();
         IdenToken idenToken = new IdenToken();
+        FIdenToken fIdenToken = new FIdenToken();
         LitToken litToken = new LitToken();
 
 
@@ -101,6 +108,7 @@ public class Parser {
         if (isBoolOp(undefined)) return new BoolToken(undefined);
         if (isBoolChain(undefined)) return new BoolChainToken(undefined);
         if (isIdentifer(undefined, idenToken)) return idenToken;
+        if (isFIdentifer(undefined, fIdenToken)) return fIdenToken;
         if (isLiteral(undefined, litToken)) return litToken;
 
         return undefined;

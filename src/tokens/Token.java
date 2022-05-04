@@ -74,6 +74,7 @@ public class Token {
             case "func_space" -> new FunctionsToken();
             case "func_dec" -> new FuncToken();
             case "func_term" -> new ArgsToken();
+            case "func_call" -> new FCallToken();
             default -> null;
         };
     }

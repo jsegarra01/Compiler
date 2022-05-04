@@ -1,6 +1,7 @@
 package tokens;
 
 import tokens.leaf.ArgsToken;
+import tokens.terminal.FIdenToken;
 import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public class FuncToken extends Token{
     protected TypeToken type;
-    protected IdenToken id;
+    protected FIdenToken id;
     protected ArrayList<ArgsToken> args;
     protected CodeToken code;
     protected Token returnToken;
@@ -40,8 +41,8 @@ public class FuncToken extends Token{
                 in.setParent(this);
                 return this;
             }
-            if (in instanceof IdenToken && this.id == null){
-                this.id = (IdenToken) in;
+            if (in instanceof FIdenToken && this.id == null){
+                this.id = (FIdenToken) in;
                 in.setParent(this);
                 return this;
             }
