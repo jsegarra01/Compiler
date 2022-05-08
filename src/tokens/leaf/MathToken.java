@@ -140,12 +140,12 @@ public class MathToken extends Token {
         }
 
         if(op == null){
-            mathStep = "t" + getIteration() + " = " + leftDisplay;
+            mathStep = "$t" + getIteration() + " = " + leftDisplay;
         }
         else {
-            mathStep = "t" + getIteration() + " = " + leftDisplay + " " + op.getRaw() + " " + rightDisplay + " ;";
+            mathStep = "$t" + getIteration() + " = " + leftDisplay + " " + op.getRaw() + " " + rightDisplay;
         }
         writer.println(mathStep);
-        return "t" + getIteration();
+        return "$t" + getIteration();
     }
 }

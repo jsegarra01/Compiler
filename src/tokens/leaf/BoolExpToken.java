@@ -116,18 +116,32 @@ public class BoolExpToken extends Token {
             conditionPart++;
             return "t" + (conditionPart - 1);
         }
+        String invertedOp = invertOperation(op.getRaw());
         if(isLoop) {
             increaseLabelIteration();
-            writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + (getLabelIteration() + 1));
+
+            writer.println("IF ( " + leftDisplay + " " + invertedOp + " " + rightDisplay + " ) " + "GOTO L" + (getLabelIteration() + 1));
             return "L" + getLabelIteration() + ":";
         }
         else{
             increaseLabelIteration();
-            writer.println("IF !(" + leftDisplay + op.getRaw() + rightDisplay + ") " + "GOTO L" + getLabelIteration());
+            writer.println("IF ( " + leftDisplay + " " + invertedOp + " " + rightDisplay + " ) " + "GOTO L" + getLabelIteration());
             return "L" + getLabelIteration() + ":";
         }
 
     }
+
+    public String invertOperation(String op) {
+        return switch (op) {
+            case "<" -> ">=";
+            case "==" -> "!=";
+            case ">" -> "<=";
+            case "!=" -> "==";
+            case "<=" -> ">";
+            default -> "<";
+        };
+    }
+
     public int getLabel() {
         return getLabelIteration();
     }

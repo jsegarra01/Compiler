@@ -67,7 +67,7 @@ public class VarDecToken extends Token {
         else{
             assignation = value.getRaw();
         }
-        String finalDeclaration = identifier.getRaw() + " = " + assignation + " ;";
+        String finalDeclaration = identifier.getRaw() + " := " + assignation;
         writer.println(finalDeclaration);
         return finalDeclaration;
     }

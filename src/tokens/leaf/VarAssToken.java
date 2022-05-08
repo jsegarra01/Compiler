@@ -59,7 +59,7 @@ public class VarAssToken extends Token {
 
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
-        String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer) + " ;";
+        String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer);
         writer.println(finalAssignation);
         return finalAssignation;
     }
