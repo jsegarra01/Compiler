@@ -1,10 +1,8 @@
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class MIPS {
@@ -17,7 +15,7 @@ public class MIPS {
         Scanner scanner = new Scanner(new File("res/tac.txt"));
         PrintWriter writer = new PrintWriter("res/mips.txt", "UTF-8");
         translate = new ArrayList<>();
-        //boolean[] tAvailable = {true, true, true, true, true, true, true, true, true, true};
+
         while (scanner.hasNextLine()) {
             lineRead = scanner.nextLine();
             if(lineRead.contains(":=")) {
@@ -30,7 +28,7 @@ public class MIPS {
                 writeIf(writer, lineRead);
             } else if(lineRead.contains("+") || lineRead.contains("-") || lineRead.contains("*") || lineRead.contains("/")) { //MATH
                 writeMath(writer, lineRead);
-            } else {
+            } else { //Var assignation
                 writeAssign(writer, lineRead);
             }
         }
