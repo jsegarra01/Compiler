@@ -10,7 +10,7 @@ public class Controller {
 
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test9.ap");
+        this.parser = new Parser("res/test2.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
         this.mips = new MIPS();

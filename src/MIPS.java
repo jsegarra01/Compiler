@@ -45,6 +45,14 @@ public class MIPS {
         translate.add(tVar);
         currentT--;
         writer.println("#" + linePart[0] + " --> " + tVar);
+        if(!linePart[2].equals("0")) {
+            if(isNumeric(linePart[2])) {
+                writer.println("li " + tVar + ", " + linePart[2]);
+            }
+            else {
+                writer.println("li " + tVar + ", '" + linePart[2] + "'");
+            }
+        }
     }
 
     public void writeLabel(PrintWriter writer, String lineRead) {
