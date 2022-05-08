@@ -11,12 +11,13 @@ import java.util.ArrayList;
 
 public class VarAssToken extends Token {
     private IdenToken id;
-    private MathToken value;
+    private Token value;
 
     public VarAssToken() {
         super.name = "var_ass";
     }
 
+    //TODO: This is used for the tac it will need to be changed to deal with a function call
     public void setValue(MathToken value) {
         this.value = value;
     }
@@ -39,8 +40,13 @@ public class VarAssToken extends Token {
             }
             else if(this.value == null){
                 if(in instanceof MathToken){
-                    this.value = (MathToken) in;
+                    this.value = in;
                     this.value.setParent(this);
+                    return this.value;
+                }
+                else if (in instanceof FCallToken){
+                    this.value = in;
+                    in.setParent(this);
                     return this.value;
                 }
                 else{

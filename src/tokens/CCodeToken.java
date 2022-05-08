@@ -1,6 +1,8 @@
 package tokens;
 
 import tokens.leaf.VarAssToken;
+import tokens.terminal.IdenToken;
+import tokens.terminal.LitToken;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -33,6 +35,9 @@ public class CCodeToken extends Token{
             }
             else if (in instanceof CCodeToken){
                 return this;
+            }
+            else if (in instanceof IdenToken || in instanceof LitToken){
+                return this.parent.insert(in);
             }
         }
         catch (ClassCastException e){
