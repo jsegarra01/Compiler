@@ -24,7 +24,7 @@ public class FunctionsToken extends Token{
                 return in;
             }
             else {
-                return this.parent;
+                return this.parent.insert(in);
             }
         }
         catch (ClassCastException e){
