@@ -38,6 +38,9 @@ public class ProgramToken extends Token{
                 this.main.setParent(this);
                 return this.main;
             }
+            else if (in instanceof FuncToken){
+                return this.functions.insert(in);
+            }
             else if (in instanceof FunctionsToken){
                 return this;
             }
