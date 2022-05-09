@@ -1,15 +1,30 @@
 package tokens;
 
-import tokens.leaf.BoolExpToken;
-import tokens.leaf.MathToken;
-import tokens.leaf.VarAssToken;
-import tokens.leaf.VarDecToken;
+import tokens.leaf.*;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class Token {
     protected String name;
     protected String raw;
     protected Token parent;
     protected Token child;
+    private static int iteration;
+    private static int labelIteration;
+    static {
+        iteration = 0;
+        labelIteration = 0;
+    }
+
+    public static void increaseIteration() {
+        iteration++;
+    }
+
+    public static void increaseLabelIteration() {
+        labelIteration++;
+    }
 
     public Token() {
         this.parent = null;
@@ -55,6 +70,11 @@ public class Token {
             case "if_stat" -> new IfToken();
             case "else_stat" -> new ElseToken();
             case "bool_exp" -> new BoolExpToken();
+            case "loop_stat" -> new LoopToken();
+            case "func_space" -> new FunctionsToken();
+            case "func_dec" -> new FuncToken();
+            case "func_term" -> new ArgsToken();
+            case "func_call" -> new FCallToken();
             default -> null;
         };
     }
@@ -66,4 +86,14 @@ public class Token {
         return this.child;
     }
 
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        return child.getTac(writer);
+    }
+
+    public static int getIteration() {
+        return iteration;
+    }
+    public static int getLabelIteration() {
+        return labelIteration;
+    }
 }

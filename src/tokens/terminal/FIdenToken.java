@@ -4,9 +4,9 @@ import tokens.Token;
 
 import java.io.PrintWriter;
 
-public class OpToken extends Token {
-    public OpToken() {
-        super.name="math_op1 math_op2";
+public class FIdenToken extends Token {
+    public FIdenToken() {
+        super.name = "fid";
     }
 
     @Override

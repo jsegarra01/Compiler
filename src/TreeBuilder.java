@@ -16,6 +16,10 @@ public class TreeBuilder {
     private Token root;
     private boolean error;
 
+    public Token getRoot() {
+        return root;
+    }
+
     public TreeBuilder(Parser parser, SymbolTable st) {
         this.parser = parser;
         this.st = st;

@@ -6,6 +6,7 @@ import tokens.terminal.LitToken;
 import tokens.terminal.OpToken;
 import tokens.Token;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class MathToken extends Token {
@@ -13,6 +14,7 @@ public class MathToken extends Token {
     private Token left;
     private OpToken op;
     private Token right;
+
 
     public MathToken() {
         super.name = "math";
@@ -129,5 +131,33 @@ public class MathToken extends Token {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String leftDisplay;
+        String rightDisplay = null;
+        String mathStep;
+        
+        leftDisplay = left.getRaw();
+        if(op != null) {
+            rightDisplay = right.getRaw();
+            if(left.getClass() == MathToken.class) {
+                leftDisplay = left.getTac(writer);
+            }
+            if(right.getClass() == MathToken.class){
+                rightDisplay = right.getTac(writer);
+            }
+            increaseIteration();
+        }
+
+        if(op == null){
+            mathStep = "t" + getIteration() + " = " + leftDisplay;
+        }
+        else {
+            mathStep = "t" + getIteration() + " = " + leftDisplay + " " + op.getRaw() + " " + rightDisplay + " ;";
+        }
+        writer.println(mathStep);
+        return "t" + getIteration();
     }
 }

@@ -2,6 +2,8 @@ package tokens.terminal;
 
 import tokens.Token;
 
+import java.io.PrintWriter;
+
 public class LitToken extends Token {
     public LitToken() {
         super.name = "lit";
@@ -12,4 +14,8 @@ public class LitToken extends Token {
         return null;
     }
 
+    @Override
+    public String getTac(PrintWriter writer) {
+        return super.getRaw();
+    }
 }

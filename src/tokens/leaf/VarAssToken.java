@@ -3,19 +3,21 @@ package tokens.leaf;
 import tokens.CCodeToken;
 import tokens.Token;
 import tokens.terminal.IdenToken;
-import tokens.terminal.LitToken;
-import tokens.terminal.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class VarAssToken extends Token {
     private IdenToken id;
-    private MathToken value;
+    private Token value;
 
     public VarAssToken() {
         super.name = "var_ass";
     }
 
+    //TODO: This is used for the tac it will need to be changed to deal with a function call
     public IdenToken getId() {
         return id;
     }
@@ -46,8 +48,13 @@ public class VarAssToken extends Token {
             }
             else if(this.value == null){
                 if(in instanceof MathToken){
-                    this.value = (MathToken) in;
+                    this.value = in;
                     this.value.setParent(this);
+                    return this.value;
+                }
+                else if (in instanceof FCallToken){
+                    this.value = in;
+                    in.setParent(this);
                     return this.value;
                 }
                 else{
@@ -62,5 +69,12 @@ public class VarAssToken extends Token {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer) + " ;";
+        writer.println(finalAssignation);
+        return finalAssignation;
     }
 }

@@ -1,5 +1,8 @@
 package tokens;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class CodeToken extends Token{
@@ -38,5 +41,10 @@ public class CodeToken extends Token{
         catch (ClassCastException e){
             return null;
         }
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        return varDecs.getTac(writer) + code.getTac(writer);
     }
 }
