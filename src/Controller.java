@@ -11,7 +11,7 @@ public class Controller {
 
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test6.ap");
+        this.parser = new Parser("res/test7.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
     }
