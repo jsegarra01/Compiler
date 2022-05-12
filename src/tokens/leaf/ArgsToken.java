@@ -14,6 +14,22 @@ public class ArgsToken extends Token {
         super.name = "func_term";
     }
 
+    public TypeToken getType() {
+        return type;
+    }
+
+    public void setType(TypeToken type) {
+        this.type = type;
+    }
+
+    public IdenToken getId() {
+        return id;
+    }
+
+    public void setId(IdenToken id) {
+        this.id = id;
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();

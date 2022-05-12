@@ -22,6 +22,54 @@ public class FuncToken extends Token{
         this.argsDone = false;
     }
 
+    public TypeToken getType() {
+        return type;
+    }
+
+    public void setType(TypeToken type) {
+        this.type = type;
+    }
+
+    public FIdenToken getId() {
+        return id;
+    }
+
+    public void setId(FIdenToken id) {
+        this.id = id;
+    }
+
+    public ArrayList<ArgsToken> getArgs() {
+        return args;
+    }
+
+    public void setArgs(ArrayList<ArgsToken> args) {
+        this.args = args;
+    }
+
+    public CodeToken getCode() {
+        return code;
+    }
+
+    public void setCode(CodeToken code) {
+        this.code = code;
+    }
+
+    public Token getReturnToken() {
+        return returnToken;
+    }
+
+    public void setReturnToken(Token returnToken) {
+        this.returnToken = returnToken;
+    }
+
+    public boolean isArgsDone() {
+        return argsDone;
+    }
+
+    public void setArgsDone(boolean argsDone) {
+        this.argsDone = argsDone;
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();

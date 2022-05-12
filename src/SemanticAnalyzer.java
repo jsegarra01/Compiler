@@ -1,8 +1,6 @@
+import tokens.FuncToken;
 import tokens.Token;
-import tokens.leaf.BoolExpToken;
-import tokens.leaf.MathToken;
-import tokens.leaf.VarAssToken;
-import tokens.leaf.VarDecToken;
+import tokens.leaf.*;
 import tokens.terminal.BoolToken;
 import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
@@ -15,15 +13,17 @@ import java.util.*;
 
 public class SemanticAnalyzer {
     private HashMap<String, ArrayList<String>> semanticTable;
+    private HashMap<String, ArrayList<ArgsToken>> functionsTable;
 
 
     public SemanticAnalyzer() {
         semanticTable = new HashMap<>();
+        functionsTable = new HashMap<>();
     }
 
     public boolean varCreated(String type, String id, String scope) {
 
-        if (semanticTable.containsKey(id)) return false;
+        if (semanticTable.containsKey(id) && semanticTable.get(id).get(1).equals(scope)) return false;
 
         ArrayList<String> tmp = new ArrayList<>();
         tmp.add(type);
@@ -74,16 +74,18 @@ public class SemanticAnalyzer {
     public boolean varAssValidate(VarAssToken token, String scope) {
         if (!semanticTable.containsKey(token.getId().getRaw())) return false;
 
-        return mathExpValidate(token.getValue(), semanticTable.get(token.getId().getRaw()).get(0));
+        if(token.getValue() instanceof MathToken) return mathExpValidate((MathToken) token.getValue(), semanticTable.get(token.getId().getRaw()).get(0), scope);
+        return true;
     }
 
-    private boolean mathExpValidate(MathToken token, String type) {
+    private boolean mathExpValidate(MathToken token, String type, String scope) {
 
         switch (type) {
             case "char":
                 if (token.getLeft() instanceof IdenToken) {
                     if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
                     if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(1).equals(scope)) return false;
                 } else {
                     if (!(token.getLeft() instanceof LitToken)) return false;
                     if (Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
@@ -98,6 +100,7 @@ public class SemanticAnalyzer {
                 if (token.getLeft() instanceof IdenToken) {
                     if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
                     if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(1).equals(scope)) return false;
                 } else {
                     if (!(token.getLeft() instanceof LitToken)) return false;
                     if (!(token.getLeft().getRaw().equals("true") || token.getLeft().getRaw().equals("false")))
@@ -111,20 +114,24 @@ public class SemanticAnalyzer {
                 if (token.getLeft() instanceof IdenToken) {
                     if (!semanticTable.containsKey(token.getLeft().getRaw())) return false;
                     if (!semanticTable.get(token.getLeft().getRaw()).get(0).equals(type)) return false;
+                    if (!semanticTable.get(token.getLeft().getRaw()).get(1).equals(scope)) return false;
                 } else {
                     if (!Character.isDigit(token.getLeft().getRaw().charAt(0))) return false;
 
                 }
 
                 if (token.getRight() instanceof MathToken) {
-                    return mathExpValidate((MathToken) token.getRight(), type);
+                    return mathExpValidate((MathToken) token.getRight(), type, scope);
                 } else {
                     if (token.getRight() instanceof IdenToken) {
                         if (!semanticTable.containsKey(token.getRight().getRaw())) return false;
                         if (!semanticTable.get(token.getRight().getRaw()).get(0).equals(type)) return false;
+                        if (!semanticTable.get(token.getLeft().getRaw()).get(1).equals(scope)) return false;
                     } else {
-                        if (!Character.isDigit(token.getRight().getRaw().charAt(0)) && token.getRight() != null)
-                            return false;
+                        if(token.getRight() == null) {
+                            break;
+                        }
+                        if (!Character.isDigit(token.getRight().getRaw().charAt(0))) return false;
                     }
                 }
 
@@ -214,6 +221,26 @@ public class SemanticAnalyzer {
                 }
                 break;
         }
+        return true;
+    }
+
+    public boolean funcDecValidate(FuncToken token, String scope) {
+        if (functionsTable.containsKey(token.getId().getRaw())) return false;
+        for (ArgsToken argsToken: token.getArgs()) {
+            if (semanticTable.containsKey(token.getId().getRaw()) && semanticTable.get(token.getId().getRaw()).get(1).equals(scope)) return false;
+
+            ArrayList<String> tmp = new ArrayList<>();
+            tmp.add(argsToken.getType().getRaw());
+            tmp.add(scope);
+            semanticTable.put(argsToken.getId().getRaw(), tmp);
+        }
+
+        functionsTable.put(token.getId().getRaw(), token.getArgs());
+        return true;
+    }
+
+    public boolean funcCallValidate(FCallToken token, String scope) {
+
         return true;
     }
 

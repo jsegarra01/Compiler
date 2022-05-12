@@ -22,11 +22,11 @@ public class VarAssToken extends Token {
         return id;
     }
 
-    public MathToken getValue() {
+    public Token getValue() {
         return value;
     }
 
-    public void setValue(MathToken value) {
+    public void setValue(Token value) {
         this.value = value;
     }
 

@@ -1,8 +1,7 @@
+import tokens.FuncToken;
+import tokens.MainToken;
 import tokens.Token;
-import tokens.leaf.BoolExpToken;
-import tokens.leaf.MathToken;
-import tokens.leaf.VarAssToken;
-import tokens.leaf.VarDecToken;
+import tokens.leaf.*;
 import tokens.terminal.*;
 
 import java.util.ArrayList;
@@ -141,183 +140,59 @@ public class TreeBuilder {
     }
 
     public void semAnalysis(SemanticAnalyzer semanticAnalyzer) {
+        int functionScope = 0;
         if(error){
             return;
         }
-        ArrayList<ArrayList<Token>> disp = parseTree();
+        ArrayList<Token> disp = DFSTree();
 
-        for (ArrayList<Token> curr: disp){
-            for (Token tmp : curr){
-                if(tmp instanceof VarDecToken) {
-                    if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, "0")) {
-                        System.out.println("Semantic error");
-                        return;
-                    }
+        for (Token tmp : disp){
+            if (tmp instanceof FuncToken) {
+                functionScope++;
+                if(!semanticAnalyzer.funcDecValidate((FuncToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
                 }
 
-                if(tmp instanceof VarAssToken) {
-                    if(!semanticAnalyzer.varAssValidate((VarAssToken) tmp, "0")) {
-                        System.out.println("Semantic error");
-                        return;
-                    }
-                }
+            }
 
-                if(tmp instanceof BoolExpToken) {
-                    String type = "int";
-                    Token aux = ((BoolExpToken) tmp).getLeft();
-                    if(aux instanceof IdenToken) type = aux.getRaw();
-                    if(aux instanceof LitToken) {
-                        if(!Character.isDigit(aux.getRaw().charAt(0))) type = "char";
-                        if(aux.getRaw().equals("true") || aux.getRaw().equals("false")) type = "bool";
-                    }
-                    if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, "0", type)) {
-                        System.out.println("Semantic error");
-                        return;
-                    }
-                }
+            if(tmp instanceof MainToken) {
+                functionScope++;
+            }
 
-                /*if (boolOp) {
-                    if (tmp instanceof IdenToken) {
-                        if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
-                            System.out.println("Semantic error");
-                            return;
-                        }
-                    } else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("char")) {
-                        if (tmp instanceof LitToken) {
-                            if (Character.isDigit(tmp.getRaw().charAt(0))) {
-                                System.out.println("Semantic error"); //TODO fer que pasi amb '' aixi nomes haure de mirar si charAt(0) es '
-                                return;
-                            }
-                            if ((tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        }
-                    }
-                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("bool")) {
-                        if (tmp instanceof LitToken) {
-                            if (!(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        }
-                    }
-                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("int") || semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("float")) {
-                        if (tmp instanceof LitToken) {
-                            if (!Character.isDigit(tmp.getRaw().charAt(0))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        }
-                    }
+            if (tmp instanceof FCallToken) {
+                if(!semanticAnalyzer.funcCallValidate((FCallToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
+                }
+            }
 
+            if(tmp instanceof VarDecToken) {
+                if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
                 }
-                else if(tmp instanceof IdenToken && !isVar && !auxCall) {
-                    aux = tmp;
-                    if(semanticAnalyzer.getVar(tmp.getRaw()) == null) {
-                        System.out.println("Semantic error");
-                        return;
-                    }
-                    auxCall = true;
-                } else if (calling || auxCall2) {
-                    auxCall2 = true;
-                    calling = false;
-                    if (tmp instanceof IdenToken) {
-                        if (!semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals(semanticAnalyzer.getVar(tmp.getRaw()).getRaw())) {
-                            System.out.println("Semantic error");
-                            return;
-                        }
-                    } else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("char")) {
-                        if (tmp instanceof OpToken || tmp instanceof BoolToken || tmp instanceof BoolExpToken || tmp instanceof BoolChainToken) {
-                            System.out.println("Semantic error");
-                            return;
-                        }
-                        if (tmp instanceof LitToken) {
-                            if (Character.isDigit(tmp.getRaw().charAt(0))) {
-                                System.out.println("Semantic error"); //TODO fer que pasi amb '' aixi nomes haure de mirar si charAt(0) es '
-                                return;
-                            }
-                        }
-                    }
-                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("bool")) {
-                        if (tmp instanceof OpToken) {
-                            System.out.println("Semantic error");
-                            return;
-                        }
-                        if (tmp instanceof LitToken) {
-                            if (!(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        }
-                    }
-                    else if (semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("int") || semanticAnalyzer.getVar(aux.getRaw()).getRaw().equals("float")) {
-                        if (tmp instanceof BoolToken || tmp instanceof BoolExpToken || tmp instanceof BoolChainToken) {
-                            System.out.println("Semantic error");
-                            return;
-                        }
-                        if (tmp instanceof LitToken) {
-                            if (!Character.isDigit(tmp.getRaw().charAt(0))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        }
-                    }
-                }
-                else if (tmp instanceof MathToken && auxCall){
-                    calling = true;
-                } else if (auxCall){
-                    if (!(tmp instanceof BoolToken)) {
-                        auxCall = false;
-                    } else {
-                        boolOp = true;
-                    }
-                }
-                if (isVar){
-                    if(once) key = tmp.getRaw();
+            }
 
-
-                    if (!(tmp instanceof LitToken) && !(tmp instanceof IdenToken)) { //TODO: fer be aquest if
-                        if(!semanticAnalyzer.varCreated(key, (TypeToken) aux)) {
-                            System.out.println("Variable " + key + " already declared");
-                            return;
-                        }
-                        isVar = false;
-                    } else {
-                        if(tmp instanceof IdenToken  && !once) {
-                            if (!semanticAnalyzer.getVar(tmp.getRaw()).getRaw().equals(aux.getRaw()))   {
-                                 System.out.println("Semantic error" + tmp.getRaw() + aux.getRaw());
-                                 return;
-                            }
-                        }
-                        if(aux.getRaw().equals("bool")) {
-                            if(tmp instanceof LitToken && !(tmp.getRaw().equals("true") || tmp.getRaw().equals("false"))) {
-                                System.out.println("Semantic error");
-                                return;
-                            }
-                        } else if(aux.getRaw().equals("char")){
-                            if(tmp instanceof LitToken) {
-                                if (Character.isDigit(tmp.getRaw().charAt(0))) {
-                                    System.out.println("Semantic error");
-                                    return;
-                                }
-                            }
-                        } else {
-                            if(tmp instanceof LitToken) {
-                                if (!Character.isDigit(tmp.getRaw().charAt(0))) {
-                                    System.out.println("Semantic error");
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    once = false;
+            if(tmp instanceof VarAssToken) {
+                if(!semanticAnalyzer.varAssValidate((VarAssToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
                 }
-                if(tmp instanceof TypeToken){
-                    aux = tmp;
-                    isVar = true;
-                    once = true;
-                }*/
+            }
+
+            if(tmp instanceof BoolExpToken) {
+                String type = "int";
+                Token aux = ((BoolExpToken) tmp).getLeft();
+                if(aux instanceof IdenToken) type = aux.getRaw();
+                if(aux instanceof LitToken) {
+                    if(!Character.isDigit(aux.getRaw().charAt(0))) type = "char";
+                    if(aux.getRaw().equals("true") || aux.getRaw().equals("false")) type = "bool";
+                }
+                if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, Integer.toString(functionScope), type)) {
+                    System.out.println("Semantic error");
+                    return;
+                }
             }
         }
         semanticAnalyzer.printAll();
@@ -352,6 +227,38 @@ public class TreeBuilder {
             else{
                 lvl++;
             }
+        }
+        return disp;
+    }
+
+    private ArrayList<Token> DFSTree() {
+
+        ArrayList<Token> disp = new ArrayList<>();
+        Stack<Token> aux = new Stack<>();
+
+        aux.push(root);
+
+        do {
+            if (aux.peek() == null){
+                break;
+            }
+            Token current = aux.pop();
+            disp.add(current);
+            Object temp = current.getChild();
+            if(temp != null) {
+                if (temp instanceof ArrayList<?>) {
+                    ArrayList<Token> list = (ArrayList<Token>) temp;
+                    for (int i = list.size()-1; i >= 0; i--) {
+                        aux.push(list.get(i));
+                    }
+                } else {
+                    aux.push((Token) temp);
+                }
+            }
+        } while (!aux.empty());
+
+        for (Token token: disp) {
+            System.out.println(token.getName());
         }
         return disp;
     }
