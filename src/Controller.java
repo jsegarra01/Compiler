@@ -1,6 +1,4 @@
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class Controller {
@@ -8,12 +6,14 @@ public class Controller {
     private Parser parser;
     private TreeBuilder tb;
     private TAC tac;
+    private MIPS mips;
 
     public Controller() {
         this.st = new SymbolTable();
         this.parser = new Parser("res/test7.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
+        this.mips = new MIPS();
     }
 
     public void compile() throws FileNotFoundException, UnsupportedEncodingException {
@@ -21,5 +21,6 @@ public class Controller {
         tb.printTree();
         //tac.generate(tb);
         System.out.println("TAC file successfully created.");
+        mips.read();
     }
 }
