@@ -188,7 +188,7 @@ public class TreeBuilder {
                 }
             }
         }
-        semanticAnalyzer.printAll();
+        //semanticAnalyzer.printAll();
     }
 
     private ArrayList<ArrayList<Token>> parseTree() {
@@ -253,9 +253,6 @@ public class TreeBuilder {
             }
         } while (!aux.empty());
 
-        for (Token token: disp) {
-            System.out.println(token.getName());
-        }
         return disp;
     }
 
