@@ -38,7 +38,7 @@ public class FunctionsToken extends Token{
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
         for (FuncToken function : functions) {
-            return function.getTac(writer);
+            function.getTac(writer);
         }
         return null;
     }

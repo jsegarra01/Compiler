@@ -85,6 +85,9 @@ public class FuncToken extends Token{
         for (ArgsToken arg : args) {
             arg.getTac(writer);
         }
-        return code.getTac(writer);
+        resetVarPassedIteration();
+        code.getTac(writer);
+        writer.println("return " + returnToken.getRaw());
+        return null;
     }
 }
