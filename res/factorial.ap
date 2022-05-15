@@ -1,7 +1,7 @@
 func int #factorial ( int $input ) {
     var int $i = 1 ;
     var int $total = 1 ;
-    loop ( $i < $input || $i == $input ) {
+    loop ( $i < $input ) {
         $total = $total * $i ;
         $i = $i + 1 ;
     }
@@ -9,7 +9,7 @@ func int #factorial ( int $input ) {
 }
 
 start {
-    var int $input = 5 ;
+    var int $inputStart = 5 ;
     var int $result ;
-    $result = #factorial ( $input ) ;
+    $result = #factorial ( $inputStart ) ;
 }
