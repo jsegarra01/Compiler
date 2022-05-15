@@ -30,6 +30,7 @@ public class MainToken extends Token{
 
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        writer.println("MAIN:");
         return code.getTac(writer);
     }
 }
