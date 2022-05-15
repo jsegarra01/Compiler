@@ -18,6 +18,7 @@ public class MIPS {
 
         while (scanner.hasNextLine()) {
             lineRead = scanner.nextLine();
+            System.out.println(lineRead);
             if(lineRead.contains(":=")) {
                 writeDec(writer, lineRead);
             } else if(lineRead.endsWith(":")) { //Labels
@@ -28,7 +29,12 @@ public class MIPS {
                 writeIf(writer, lineRead);
             } else if(lineRead.contains("+") || lineRead.contains("-") || lineRead.contains("*") || lineRead.contains("/")) { //MATH
                 writeMath(writer, lineRead);
-            } else { //Var assignation
+            } else if(lineRead.startsWith("call")) {
+                System.out.println(lineRead);
+                writeFuncCall(writer, lineRead);
+            } else if(lineRead.startsWith("return")) {
+                writeFuncReturn(writer, lineRead);
+            } else if(lineRead.contains(" = ")){ //Var assignation
                 writeAssign(writer, lineRead);
             }
         }
@@ -64,9 +70,20 @@ public class MIPS {
         }
     }
 
+    public void writeFuncCall(PrintWriter writer, String lineRead) {
+        String[] linePart = lineRead.split(" ");
+        writer.println("jal " + linePart[1]);
+    }
+
+    public void writeFuncReturn(PrintWriter writer, String lineRead) {
+        String[] linePart = lineRead.split(" ");
+        lineRead = "$v0 = " + linePart[1];
+        writeAssign(writer, lineRead);
+        writer.println("jr $ra");
+    }
+
     public void writeIf(PrintWriter writer, String lineRead) {
-        String[] linePart;
-        linePart = lineRead.split(" ");
+        String[] linePart = lineRead.split(" ");
         if(!linePart[2].startsWith("$")) {
             linePart[2] = translateToVar(writer, linePart[2]);
         }
@@ -125,7 +142,7 @@ public class MIPS {
 
     public void writeAssign(PrintWriter writer, String lineRead) {
         String[] linePart = lineRead.split(" ");
-        if(linePart[2].startsWith("$")) {
+        if (linePart[2].startsWith("$")) {
             for (int i = 0; i < translate.size(); i++) {
                 if (translate.get(i).equals(linePart[0])) {
                     i++;
@@ -133,12 +150,10 @@ public class MIPS {
                 }
                 i++;
             }
-        }
-        else if(isNumeric(linePart[2])) {
+        } else if (isNumeric(linePart[2])) {
             if (linePart[0].startsWith("$")) {
                 writer.println("li " + linePart[0] + ", " + linePart[2]);
-            }
-            else {
+            } else {
                 for (int i = 0; i < translate.size(); i++) {
                     if (translate.get(i).equals(linePart[0])) {
                         i++;
@@ -147,12 +162,15 @@ public class MIPS {
                     i++;
                 }
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < translate.size(); i++) {
                 if (translate.get(i).equals(linePart[0])) {
                     i++;
                     writer.println("li " + translate.get(i) + ", '" + linePart[2] + "'");
+                }
+                else if(translate.get(i).equals(linePart[2])) {
+                    i++;
+                    writer.println("move " + linePart[0] + ", " + translate.get(i));
                 }
                 i++;
             }

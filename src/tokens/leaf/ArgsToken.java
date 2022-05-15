@@ -59,9 +59,10 @@ public class ArgsToken extends Token {
 
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
-        String finalDeclaration = id.getRaw() + " := $a" + getVarPassedIteration();
-        increaseVarPassedIteration();
+        String finalDeclaration = id.getRaw() + " := 0";
         writer.println(finalDeclaration);
+        writer.println(id.getRaw() + " = " + "$a" + getVarPassedIteration());
+        increaseVarPassedIteration();
         return finalDeclaration;
     }
 }
