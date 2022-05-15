@@ -6,6 +6,9 @@ import tokens.terminal.FIdenToken;
 import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class FCallToken extends Token {
@@ -48,5 +51,10 @@ public class FCallToken extends Token {
         catch (ClassCastException e){
             return null;
         }
+    }
+
+
+    public ArrayList<Token> getArgs() {
+        return args;
     }
 }

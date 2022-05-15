@@ -13,9 +13,11 @@ public class Token {
     protected Token child;
     private static int iteration;
     private static int labelIteration;
+    private static int varPassedIteration;
     static {
         iteration = 0;
         labelIteration = 0;
+        varPassedIteration = 0;
     }
 
     public static void increaseIteration() {
@@ -24,6 +26,14 @@ public class Token {
 
     public static void increaseLabelIteration() {
         labelIteration++;
+    }
+
+    public static void increaseVarPassedIteration() {
+        varPassedIteration++;
+    }
+
+    public static void resetVarPassedIteration() {
+        varPassedIteration = 0;
     }
 
     public Token() {
@@ -95,5 +105,8 @@ public class Token {
     }
     public static int getLabelIteration() {
         return labelIteration;
+    }
+    public static int getVarPassedIteration() {
+        return varPassedIteration;
     }
 }

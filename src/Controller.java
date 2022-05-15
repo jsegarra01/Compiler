@@ -10,7 +10,7 @@ public class Controller {
 
     public Controller() {
         this.st = new SymbolTable();
-        this.parser = new Parser("res/test7.ap");
+        this.parser = new Parser("res/test11.ap");
         this.tb = new TreeBuilder(parser, st);
         this.tac = new TAC();
         this.mips = new MIPS();
@@ -19,8 +19,8 @@ public class Controller {
     public void compile() throws FileNotFoundException, UnsupportedEncodingException {
         tb.run();
         tb.printTree();
-        //tac.generate(tb);
+        tac.generate(tb);
         System.out.println("TAC file successfully created.");
-        mips.read();
+        //mips.read();
     }
 }

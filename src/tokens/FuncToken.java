@@ -6,6 +6,9 @@ import tokens.terminal.IdenToken;
 import tokens.terminal.LitToken;
 import tokens.terminal.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class FuncToken extends Token{
@@ -74,5 +77,18 @@ public class FuncToken extends Token{
         catch (ClassCastException e){
             return null;
         }
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        writer.println(id.getRaw() + ":");
+        for (ArgsToken arg : args) {
+            arg.getTac(writer);
+        }
+        resetVarPassedIteration();
+        code.getTac(writer);
+        writer.println("return " + returnToken.getRaw());
+        writer.println();
+        return null;
     }
 }

@@ -55,6 +55,9 @@ public class ProgramToken extends Token{
 
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        if(functions != null) {
+            functions.getTac(writer);
+        }
         return main.getTac(writer);
     }
 }

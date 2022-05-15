@@ -20,7 +20,7 @@ public class MIPS {
             lineRead = scanner.nextLine();
             if(lineRead.contains(":=")) {
                 writeDec(writer, lineRead);
-            } else if(lineRead.startsWith("L")) { //Labels
+            } else if(lineRead.endsWith(":")) { //Labels
                 writeLabel(writer, lineRead);
             } else if(lineRead.startsWith("GOTO")) { //GOTO labels
                 writeGoto(writer, lineRead);

@@ -65,8 +65,21 @@ public class VarAssToken extends Token {
 
     @Override
     public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
-        String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer);
-        writer.println(finalAssignation);
-        return finalAssignation;
+        if(value.getClass() == MathToken.class) {
+            String finalAssignation = id.getTac(writer) + " = " + value.getTac(writer);
+            writer.println(finalAssignation);
+            return finalAssignation;
+        }
+        else {
+            FCallToken fCallToken = (FCallToken) value;
+            ArrayList<Token> arguments = fCallToken.getArgs();
+            for (Token argument : arguments) {
+                writer.println("$a" + getVarPassedIteration() + " = " + argument.getRaw());
+                increaseVarPassedIteration();
+            }
+            writer.println("call " + fCallToken.id.getRaw());
+            resetVarPassedIteration();
+            return null;
+        }
     }
 }

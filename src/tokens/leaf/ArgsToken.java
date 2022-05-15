@@ -4,6 +4,9 @@ import tokens.Token;
 import tokens.terminal.IdenToken;
 import tokens.terminal.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class ArgsToken extends Token {
@@ -52,5 +55,13 @@ public class ArgsToken extends Token {
         catch (ClassCastException e){
             return null;
         }
+    }
+
+    @Override
+    public String getTac(PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+        String finalDeclaration = id.getRaw() + " := $a" + getVarPassedIteration();
+        increaseVarPassedIteration();
+        writer.println(finalDeclaration);
+        return finalDeclaration;
     }
 }
