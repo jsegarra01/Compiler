@@ -1,0 +1,15 @@
+func int #factorial ( int $input ) {
+    var int $i = 1 ;
+    var int $total = 1 ;
+    loop ( $i < $input || $i == $input ) {
+        $total = $total * $i ;
+        $i = $i + 1 ;
+    }
+    return 0 ;
+}
+
+start {
+    var int $input = 5 ;
+    var int $result ;
+    $result = #factorial ( $input ) ;
+}

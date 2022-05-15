@@ -1,0 +1,19 @@
+func int #fib ( int $in ) {
+	var int $out ;
+	var int $parse = $in ;
+	var int $fun ;
+	if ( $in == 1 ) {
+		$out = 1 ;
+	} else {
+		$parse = $parse - 1 ;
+		$fun = #fib ( $parse ) ;
+		$out = $in * $fun ;
+	}
+	return $out ;
+}
+
+start {
+	var int $in = 5 ;
+	var int $res ;
+	$res = #fib ( $in ) ;
+}

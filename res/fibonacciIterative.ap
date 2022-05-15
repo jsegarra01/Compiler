@@ -1,0 +1,8 @@
+start {
+	var int $i = 5 ;
+	var int $out = 1 ;
+	loop ( $i > 0 ) {
+		$out = $out * $i ;
+		$i = $i - 1 ;
+	}
+}
