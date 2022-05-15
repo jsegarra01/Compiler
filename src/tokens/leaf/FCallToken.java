@@ -17,6 +17,14 @@ public class FCallToken extends Token {
         this.args = new ArrayList<>();
     }
 
+    public FIdenToken getId() {
+        return id;
+    }
+
+    public ArrayList<Token> getArgs() {
+        return args;
+    }
+
     @Override
     public Object getChild() {
         ArrayList<Token> tmp = new ArrayList<>();

@@ -160,13 +160,6 @@ public class TreeBuilder {
                 functionScope++;
             }
 
-            if (tmp instanceof FCallToken) {
-                if(!semanticAnalyzer.funcCallValidate((FCallToken) tmp, Integer.toString(functionScope))) {
-                    System.out.println("Semantic error");
-                    return;
-                }
-            }
-
             if(tmp instanceof VarDecToken) {
                 if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, Integer.toString(functionScope))) {
                     System.out.println("Semantic error");
@@ -240,13 +233,16 @@ public class TreeBuilder {
 
         do {
             if (aux.peek() == null){
-                break;
+                aux.pop();
+                if (aux.empty()) {
+                    break;
+                }
             }
             Token current = aux.pop();
             disp.add(current);
             Object temp = current.getChild();
             if(temp != null) {
-                if (temp instanceof ArrayList<?>) {
+                if (temp instanceof ArrayList) {
                     ArrayList<Token> list = (ArrayList<Token>) temp;
                     for (int i = list.size()-1; i >= 0; i--) {
                         aux.push(list.get(i));

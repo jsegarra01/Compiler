@@ -13,7 +13,7 @@ import java.util.*;
 
 public class SemanticAnalyzer {
     private HashMap<String, ArrayList<String>> semanticTable;
-    private HashMap<String, ArrayList<ArgsToken>> functionsTable;
+    private HashMap<String, FuncToken> functionsTable;
 
 
     public SemanticAnalyzer() {
@@ -51,6 +51,10 @@ public class SemanticAnalyzer {
     public boolean varDecValidate(VarDecToken token, String scope) {
         if (!varCreated(token.getType().getRaw(), token.getIdentifier().getRaw(), scope)) return false;
 
+        if(token.getValue() == null) {
+            return true;
+        }
+
         switch (token.getType().getRaw()) {
             case "char":
                 if (Character.isDigit(token.getValue().getRaw().charAt(0))) return false;
@@ -75,6 +79,7 @@ public class SemanticAnalyzer {
         if (!semanticTable.containsKey(token.getId().getRaw())) return false;
 
         if(token.getValue() instanceof MathToken) return mathExpValidate((MathToken) token.getValue(), semanticTable.get(token.getId().getRaw()).get(0), scope);
+        if(token.getValue() instanceof FCallToken) return funcCallValidate((FCallToken) token.getValue(), semanticTable.get(token.getId().getRaw()).get(0), scope);
         return true;
     }
 
@@ -235,11 +240,42 @@ public class SemanticAnalyzer {
             semanticTable.put(argsToken.getId().getRaw(), tmp);
         }
 
-        functionsTable.put(token.getId().getRaw(), token.getArgs());
+        functionsTable.put(token.getId().getRaw(), token);
         return true;
     }
 
-    public boolean funcCallValidate(FCallToken token, String scope) {
+    private boolean funcCallValidate(FCallToken token, String type, String scope) {
+        if(!functionsTable.containsKey(token.getId().getRaw())) return false;
+        if(!functionsTable.get(token.getId().getRaw()).getType().getRaw().equals(type)) return false;
+        int i = 0;
+
+        for (ArgsToken argsToken: functionsTable.get(token.getId().getRaw()).getArgs()) {
+            Token auxToken = token.getArgs().get(i);
+            if(auxToken instanceof IdenToken) {
+                if(!semanticTable.get(auxToken.getRaw()).get(0).equals(argsToken.getType().getRaw())) return false;
+            }
+            else if(auxToken instanceof LitToken){
+                switch (argsToken.getType().getRaw()) {
+                    case "char":
+                        if (Character.isDigit(auxToken.getRaw().charAt(0))) return false;
+                        if ((auxToken.getRaw().equals("true") || auxToken.getRaw().equals("false")))
+                            return false;
+
+                        break;
+                    case "bool":
+                        if (!(auxToken.getRaw().equals("true") || auxToken.getRaw().equals("false")))
+                            return false;
+
+                        break;
+                    default:
+                        if (!Character.isDigit(auxToken.getRaw().charAt(0))) return false;
+
+                        break;
+                }
+            }
+
+            i++;
+        }
 
         return true;
     }
