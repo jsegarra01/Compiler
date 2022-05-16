@@ -78,6 +78,7 @@ public class VarAssToken extends Token {
                 increaseVarPassedIteration();
             }
             writer.println("call " + fCallToken.id.getRaw());
+            writer.println(id.getRaw() + " = $v0");
             resetVarPassedIteration();
             return null;
         }

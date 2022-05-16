@@ -1,7 +1,8 @@
 func int #fib ( int $in ) {
 	var int $out ;
-	var int $parse = $in ;
+	var int $parse ;
 	var int $fun ;
+	$parse = $in ;
 	if ( $in == 1 ) {
 		$out = 1 ;
 	} else {
@@ -13,7 +14,7 @@ func int #fib ( int $in ) {
 }
 
 start {
-	var int $in = 5 ;
+	var int $init = 5 ;
 	var int $res ;
-	$res = #fib ( $in ) ;
+	$res = #fib ( $init ) ;
 }
