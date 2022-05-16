@@ -1,4 +1,8 @@
+import tokens.FuncToken;
+import tokens.MainToken;
 import tokens.Token;
+import tokens.leaf.*;
+import tokens.terminal.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,6 +127,72 @@ public class TreeBuilder {
         if(error){
             return;
         }
+        ArrayList<ArrayList<Token>> disp = parseTree();
+
+        for (ArrayList<Token> curr: disp){
+            for (Token tmp : curr){
+                if(tmp != null){
+                    System.out.print(tmp.getName() + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void semAnalysis(SemanticAnalyzer semanticAnalyzer) {
+        int functionScope = 0;
+        if(error){
+            return;
+        }
+        ArrayList<Token> disp = DFSTree();
+
+        for (Token tmp : disp){
+            if (tmp instanceof FuncToken) {
+                functionScope++;
+                if(!semanticAnalyzer.funcDecValidate((FuncToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
+                }
+
+            }
+
+            if(tmp instanceof MainToken) {
+                functionScope++;
+            }
+
+            if(tmp instanceof VarDecToken) {
+                if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
+                }
+            }
+
+            if(tmp instanceof VarAssToken) {
+                if(!semanticAnalyzer.varAssValidate((VarAssToken) tmp, Integer.toString(functionScope))) {
+                    System.out.println("Semantic error");
+                    return;
+                }
+            }
+
+            if(tmp instanceof BoolExpToken) {
+                String type = "int";
+                Token aux = ((BoolExpToken) tmp).getLeft();
+                if(aux instanceof IdenToken) type = aux.getRaw();
+                if(aux instanceof LitToken) {
+                    if(!Character.isDigit(aux.getRaw().charAt(0))) type = "char";
+                    if(aux.getRaw().equals("true") || aux.getRaw().equals("false")) type = "bool";
+                }
+                if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, Integer.toString(functionScope), type)) {
+                    System.out.println("Semantic error");
+                    return;
+                }
+            }
+        }
+        //semanticAnalyzer.printAll();
+    }
+
+    private ArrayList<ArrayList<Token>> parseTree() {
+
         ArrayList<ArrayList<Token>> disp = new ArrayList<>();
         int lvl = 0;
         boolean flag = true;
@@ -151,14 +221,39 @@ public class TreeBuilder {
                 lvl++;
             }
         }
-        for (ArrayList<Token> curr: disp){
-            for (Token tmp : curr){
-                if(tmp != null){
-                    System.out.print(tmp.getName() + " ");
+        return disp;
+    }
+
+    private ArrayList<Token> DFSTree() {
+
+        ArrayList<Token> disp = new ArrayList<>();
+        Stack<Token> aux = new Stack<>();
+
+        aux.push(root);
+
+        do {
+            if (aux.peek() == null){
+                aux.pop();
+                if (aux.empty()) {
+                    break;
                 }
             }
-            System.out.println();
-        }
+            Token current = aux.pop();
+            disp.add(current);
+            Object temp = current.getChild();
+            if(temp != null) {
+                if (temp instanceof ArrayList) {
+                    ArrayList<Token> list = (ArrayList<Token>) temp;
+                    for (int i = list.size()-1; i >= 0; i--) {
+                        aux.push(list.get(i));
+                    }
+                } else {
+                    aux.push((Token) temp);
+                }
+            }
+        } while (!aux.empty());
+
+        return disp;
     }
 
 

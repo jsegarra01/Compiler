@@ -18,7 +18,15 @@ public class VarAssToken extends Token {
     }
 
     //TODO: This is used for the tac it will need to be changed to deal with a function call
-    public void setValue(MathToken value) {
+    public IdenToken getId() {
+        return id;
+    }
+
+    public Token getValue() {
+        return value;
+    }
+
+    public void setValue(Token value) {
         this.value = value;
     }
 

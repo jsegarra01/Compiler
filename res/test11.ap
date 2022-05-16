@@ -4,6 +4,8 @@ func int #name ( int $a ) {
 }
 
 start {
-    $a = #name ( 1 ) ;
+    var int $a = 1 ;
+    var char $b = 'c' ;
+    $a = #name ( $a ) ;
     $a = $a + 1 ;
 }
