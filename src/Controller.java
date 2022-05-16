@@ -21,6 +21,7 @@ public class Controller {
     public void compile() throws FileNotFoundException, UnsupportedEncodingException {
         tb.run();
         tb.printTree();
+        tb.semAnalysis(semanticAnalyzer);
         tac.generate(tb);
         System.out.println("TAC file successfully created.");
         //mips.read();
