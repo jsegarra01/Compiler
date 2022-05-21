@@ -22,5 +22,5 @@ public class BoolChainToken extends Token {
     @Override
     public String getTac(PrintWriter writer) {
         return super.getRaw();
-    }
+    } //super.getRaw()
 }

@@ -18,6 +18,8 @@ public class BoolExpToken extends Token {
     private static int conditionPart;
     private static boolean isLoop;
 
+    private static boolean enteredParent;
+
     public BoolExpToken() {
         super.name="bool_exp";
     }
@@ -104,6 +106,7 @@ public class BoolExpToken extends Token {
         String rightDisplay;
         leftDisplay = left.getRaw();
         rightDisplay = right.getRaw();
+
         if(left.getClass() == BoolExpToken.class) {
             leftDisplay = left.getTac(writer);
         }
@@ -111,9 +114,22 @@ public class BoolExpToken extends Token {
             rightDisplay = right.getTac(writer);
         }
 
-        if(parent.getClass() == BoolExpToken.class) {
-            writer.println("t" + conditionPart + " = (" + leftDisplay + op.getRaw() + rightDisplay + ")");
-            conditionPart++;
+        if(parent.getClass() == BoolExpToken.class && !enteredParent) {
+            //writer.println("t" + conditionPart + " = (" + leftDisplay + op.getRaw() + rightDisplay + ")");
+            //conditionPart++;
+            BoolExpToken thisParent = (BoolExpToken) parent;
+            /*while(thisParent.parent.getClass() == BoolExpToken.class && ) {
+
+                BoolExpToken highestParent = (BoolExpToken) thisParent.parent;
+            }trying to add more concatenations*/
+            BoolExpToken concatLeft = (BoolExpToken) thisParent.getLeft();
+            BoolChainToken concatOp = (BoolChainToken) thisParent.getOp();
+            BoolExpToken concatRight = (BoolExpToken) thisParent.getRight();
+            enteredParent = true;
+            concatLeft.getTac(writer);
+            writer.println(concatOp.getRaw());
+            concatRight.getTac(writer);
+            enteredParent = false;
             return "t" + (conditionPart - 1);
         }
         String invertedOp = invertOperation(op.getRaw());
@@ -148,5 +164,17 @@ public class BoolExpToken extends Token {
 
     public void setIsLoop(boolean input) {
         isLoop = input;
+    }
+
+    public Token getLeft() {
+        return left;
+    }
+
+    public Token getRight() {
+        return right;
+    }
+
+    public Token getOp() {
+        return op;
     }
 }
