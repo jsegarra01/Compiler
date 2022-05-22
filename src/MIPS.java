@@ -12,7 +12,7 @@ public class MIPS {
 
     public void read() throws FileNotFoundException, UnsupportedEncodingException {
         String lineRead;
-        Scanner scanner = new Scanner(new File("res/tac.txt"));
+        Scanner scanner = new Scanner(new File("res/finalTac.txt"));
         PrintWriter writer = new PrintWriter("res/mips.txt", "UTF-8");
         translate = new ArrayList<>();
 
