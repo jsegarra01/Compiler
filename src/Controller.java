@@ -23,12 +23,17 @@ public class Controller {
     }
 
     public void compile() throws IOException {
-        tb.run();
-        tb.printTree();
-        tb.semAnalysis(semanticAnalyzer);
-        tac.generate(tb);
-        optimization.optimize();
-        System.out.println("TAC file successfully created.");
-        mips.read();
+        int err = tb.run();
+        if (err == 0){
+            tb.printTree();
+            err = tb.semAnalysis(semanticAnalyzer);
+            if (err == 0){
+                tac.generate(tb);
+                optimization.optimize();
+                System.out.println("TAC file successfully created.");
+                mips.read();
+            }
+        }
+
     }
 }

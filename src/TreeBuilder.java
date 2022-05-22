@@ -29,7 +29,7 @@ public class TreeBuilder {
         this.error = false;
     }
 
-    public void run(){
+    public int run(){
         Object curr = null;
         Token pointerT = this.root;
         String topStack;
@@ -65,7 +65,7 @@ public class TreeBuilder {
             }
             else if(topStack.equals("$") && curr.equals("$")){
                 System.out.println("Grammar successful");
-                return;
+                return 0;
             }
             else if(topStack.equals("$") || curr.equals("$")){
                 System.out.println("Grammar Error");
@@ -98,7 +98,7 @@ public class TreeBuilder {
                     }
 
                     error = true;
-                    return;
+                    return -1;
                 }
                 String[] prod = tmpToSplit.split(" ");
                 if(Token.genToken(topStack) != null ){
@@ -106,7 +106,7 @@ public class TreeBuilder {
                     if (pointerT == null){
                         System.out.println("Parsing Error");
                         error = true;
-                        return;
+                        return -1;
                     }
                 }
 
@@ -121,6 +121,7 @@ public class TreeBuilder {
             }
             System.out.print("");
         }
+        return -1;
     }
 
     public void printTree(){
@@ -139,10 +140,10 @@ public class TreeBuilder {
         }
     }
 
-    public void semAnalysis(SemanticAnalyzer semanticAnalyzer) {
+    public int semAnalysis(SemanticAnalyzer semanticAnalyzer) {
         int functionScope = 0;
         if(error){
-            return;
+            return -1;
         }
         ArrayList<Token> disp = DFSTree();
 
@@ -151,7 +152,7 @@ public class TreeBuilder {
                 functionScope++;
                 if(!semanticAnalyzer.funcDecValidate((FuncToken) tmp, Integer.toString(functionScope))) {
                     System.out.println("Semantic error");
-                    return;
+                    return -1;
                 }
 
             }
@@ -163,14 +164,14 @@ public class TreeBuilder {
             if(tmp instanceof VarDecToken) {
                 if(!semanticAnalyzer.varDecValidate((VarDecToken) tmp, Integer.toString(functionScope))) {
                     System.out.println("Semantic error");
-                    return;
+                    return -1;
                 }
             }
 
             if(tmp instanceof VarAssToken) {
                 if(!semanticAnalyzer.varAssValidate((VarAssToken) tmp, Integer.toString(functionScope))) {
                     System.out.println("Semantic error");
-                    return;
+                    return -1;
                 }
             }
 
@@ -184,11 +185,12 @@ public class TreeBuilder {
                 }
                 if(!semanticAnalyzer.boolExpValidate((BoolExpToken) tmp, Integer.toString(functionScope), type)) {
                     System.out.println("Semantic error");
-                    return;
+                    return -1;
                 }
             }
         }
         //semanticAnalyzer.printAll();
+        return 0;
     }
 
     private ArrayList<ArrayList<Token>> parseTree() {
