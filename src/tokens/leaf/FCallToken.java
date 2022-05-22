@@ -60,9 +60,4 @@ public class FCallToken extends Token {
             return null;
         }
     }
-
-
-    public ArrayList<Token> getArgs() {
-        return args;
-    }
 }

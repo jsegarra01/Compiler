@@ -1,1 +1,25 @@
-
+j MAIN
+factorial:
+#input --> $t8
+move $t8, $a0
+#i --> $t7
+li $t7, 1
+#total --> $t6
+li $t6, 1
+L0:
+bge $t7, $t8, L3
+mul $t1, $t6, $t7
+move $t6, $t1
+li $t9, 1
+add $t7, $t7, $t9
+j L0
+L3:
+li $v0, 0
+jr $ra
+MAIN:
+#inputStart --> $t5
+li $t5, 5
+#result --> $t4
+move $a0, $t5
+jal factorial
+move $t4, $v0

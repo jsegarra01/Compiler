@@ -177,16 +177,4 @@ public class BoolExpToken extends Token {
     public void setIsLoop(boolean input) {
         isLoop = input;
     }
-
-    public Token getLeft() {
-        return left;
-    }
-
-    public Token getRight() {
-        return right;
-    }
-
-    public Token getOp() {
-        return op;
-    }
 }

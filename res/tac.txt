@@ -1,0 +1,22 @@
+GOTO MAIN
+factorial:
+input := 0
+input = $a0
+i := 1
+total := 1
+L0:
+IF ( i >= input ) GOTO L3
+$t1 = total * i
+total = $t1
+$t2 = i + 1
+i = $t2
+GOTO L0
+L3:
+return 0
+
+MAIN:
+inputStart := 5
+result := 0
+$a0 = inputStart
+call factorial
+result = $v0
