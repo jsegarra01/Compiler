@@ -1,4 +1,4 @@
-func int fib ( int $a , int $b ) {
+func int #fib ( int $a , int $b ) {
 	var int $out ;
 	$out = $a + $b ;
 	return $out ;

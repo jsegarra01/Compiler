@@ -1,3 +1,5 @@
+import tokens.terminal.BoolChainToken;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -157,6 +159,10 @@ public class MIPS {
 
     public void writeAssign(PrintWriter writer, String lineRead) {
         String[] linePart = lineRead.split(" ");
+        String translate0 = linePart[0];
+        String translate2 = linePart[2];
+        Boolean translated2 = false;
+        Boolean translated0 = false;
         if (linePart[2].startsWith("$")) {
             for (int i = 0; i < translate.size(); i++) {
                 if (translate.get(i).equals(linePart[0])) {
@@ -180,15 +186,22 @@ public class MIPS {
         } else {
             for (int i = 0; i < translate.size(); i++) {
                 if (translate.get(i).equals(linePart[0])) {
-                    i++;
-                    writer.println("li " + translate.get(i) + ", '" + linePart[2] + "'");
+                    translate0 = translate.get(i+1);
+                    translated0 = true;
                 }
                 else if(translate.get(i).equals(linePart[2])) {
-                    i++;
-                    writer.println("move " + linePart[0] + ", " + translate.get(i));
+                    translate2 = translate.get(i+1);
+                    translated2 = true;
                 }
                 i++;
             }
+            if(translated2) {
+                writer.println("move " + translate0 + ", " + translate2);
+            }
+            else if(translated0) {
+                writer.println("li " + translate0 + ", '" + translate2 + "'");
+            }
+
         }
     }
 
