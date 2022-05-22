@@ -232,11 +232,14 @@ public class TreeBuilder {
         aux.push(root);
 
         do {
-            if (aux.peek() == null){
+            while (aux.peek() == null){
                 aux.pop();
                 if (aux.empty()) {
                     break;
                 }
+            }
+            if(aux.empty()) {
+                break;
             }
             Token current = aux.pop();
             disp.add(current);
