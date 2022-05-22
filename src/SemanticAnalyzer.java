@@ -77,6 +77,7 @@ public class SemanticAnalyzer {
 
     public boolean varAssValidate(VarAssToken token, String scope) {
         if (!semanticTable.containsKey(token.getId().getRaw())) return false;
+        if( !semanticTable.get(token.getId().getRaw()).get(1).equals(scope)) return false;
 
         if(token.getValue() instanceof MathToken) return mathExpValidate((MathToken) token.getValue(), semanticTable.get(token.getId().getRaw()).get(0), scope);
         if(token.getValue() instanceof FCallToken) return funcCallValidate((FCallToken) token.getValue(), semanticTable.get(token.getId().getRaw()).get(0), scope);
