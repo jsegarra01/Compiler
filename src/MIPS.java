@@ -102,7 +102,22 @@ public class MIPS {
 
     public void writeMath(PrintWriter writer, String lineRead) {
         String[] linePart = lineRead.split(" ");
+        String result = linePart[0];
         String var1 = linePart[2];
+
+        if(linePart[0].startsWith("$")) {
+            result = linePart[0];
+        }
+        else {
+            for (int i = 0; i < translate.size(); i++) {
+                if (translate.get(i).equals(linePart[0])) {
+                    i++;
+                    result = translate.get(i);
+                }
+                i++;
+            }
+        }
+
         if(linePart[2].startsWith("$")) {
             var1 = linePart[2];
         } else if(isNumeric(linePart[2])) {
@@ -133,10 +148,10 @@ public class MIPS {
             }
         }
         switch (linePart[3]) {
-            case "+" -> writer.println("add " + linePart[0] + ", " + var1 + ", " + var2);
-            case "-" -> writer.println("sub " + linePart[0] + ", " + var1 + ", " + var2);
-            case "*" -> writer.println("mul " + linePart[0] + ", " + var1 + ", " + var2);
-            default -> writer.println("div " + linePart[0] + ", " + var1 + ", " + var2);
+            case "+" -> writer.println("add " + result + ", " + var1 + ", " + var2);
+            case "-" -> writer.println("sub " + result + ", " + var1 + ", " + var2);
+            case "*" -> writer.println("mul " + result + ", " + var1 + ", " + var2);
+            default -> writer.println("div " + result + ", " + var1 + ", " + var2);
         }
     }
 
