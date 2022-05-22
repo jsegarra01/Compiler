@@ -1,0 +1,18 @@
+func int #fib ( int $a , int $b ) {
+	var int $out ;
+	$out = $a + $b ;
+	return $out ;
+}
+
+start {
+	var int $first = 0 ;
+	var int $second = 1 ;
+	var int $third ;
+	var int $count = 5 ;
+	loop ( $count > 0 ) {
+		$third = #fib ( $first , $second ) ;
+		$first = $second ;
+		$second = $third ;
+		$count = $count - 1 ;
+	}
+}
