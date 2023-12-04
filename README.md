@@ -1,5 +1,7 @@
-Please put code in src
+Creation of a compiler for a made up programming language.
 
-Data files in res
-
-Please do not push or commit the .idea folder or the iml
+Authors:
+- Ramón Sabater: ramon.sabater@students.salle.url.edu
+- Alvaro Delgado: alvaro.delgado@students.salle.url.edu
+- Alfonso Sarró: alfonso.sarro@students.salle.url.edu
+- Josep Segarra: josepsegavil@gmail.com
