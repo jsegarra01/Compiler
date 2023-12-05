@@ -1,3 +1,5 @@
+# Compiler
+
 Creation of a compiler for a made up programming language.
 
 Authors:
